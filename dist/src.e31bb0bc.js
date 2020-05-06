@@ -28285,7 +28285,4201 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/fast-loops/lib/objectReduce.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = objectReduce;
+
+function objectReduce(obj, reducer, initialValue) {
+  for (var key in obj) {
+    initialValue = reducer(initialValue, obj[key], key, obj);
+  }
+
+  return initialValue;
+}
+},{}],"../node_modules/fast-loops/lib/objectEach.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = objectEach;
+
+function objectEach(obj, iterator) {
+  for (var key in obj) {
+    iterator(obj[key], key, obj);
+  }
+}
+},{}],"../node_modules/fela-tools/es/mapValueToMediaQuery.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = mapValueToMediaQuery;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function mapValueToMediaQuery() {
+  var queryValueMap = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var mapper = arguments[1];
+  return (0, _objectReduce.default)(queryValueMap, function (style, value, query) {
+    if (typeof mapper === 'string') {
+      style[query] = _defineProperty({}, mapper, value);
+    } else {
+      style[query] = mapper(value);
+    }
+
+    return style;
+  }, {});
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js"}],"../node_modules/fast-loops/lib/arrayReduce.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = arrayReduce;
+
+function arrayReduce(arr, reducer, initialValue) {
+  for (var i = 0, len = arr.length; i < len; ++i) {
+    initialValue = reducer(initialValue, arr[i], i, len, arr);
+  }
+
+  return initialValue;
+}
+},{}],"../node_modules/fela-utils/es/generateCSSRule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateCSSRule;
+
+function generateCSSRule(selector, cssDeclaration) {
+  return selector + "{" + cssDeclaration + "}";
+}
+},{}],"../node_modules/fela-utils/es/findIndex.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = findIndex;
+
+// workaround, because can't use native Array findIndex in IE https://github.com/robinweser/fela/pull/766
+function findIndex(array, predicate) {
+  var index = -1;
+
+  for (var i = 0; i < array.length; i++) {
+    if (predicate(array[i])) {
+      index = i;
+      break;
+    }
+  }
+
+  return index;
+}
+},{}],"../node_modules/fela-utils/es/insertAtIndex.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = insertAtIndex;
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function insertAtIndex(arr, el, index) {
+  return [].concat(_toConsumableArray(arr.slice(0, index)), [el], _toConsumableArray(arr.slice(index, arr.length)));
+}
+},{}],"../node_modules/fela-utils/es/objectSortByScore.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = objectSortByScore;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _findIndex = _interopRequireDefault(require("./findIndex"));
+
+var _insertAtIndex = _interopRequireDefault(require("./insertAtIndex"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+// TODO: we can further improve this one
+function objectSortByScore(obj, getScore) {
+  var sortedKeys = (0, _objectReduce.default)(obj, function (resultSortedKeys, value, key) {
+    var index = (0, _findIndex.default)(resultSortedKeys, function (el) {
+      return getScore(obj[el], el) > getScore(value, key);
+    });
+
+    if (index !== -1) {
+      return (0, _insertAtIndex.default)(resultSortedKeys, key, index);
+    }
+
+    return [].concat(_toConsumableArray(resultSortedKeys), [key]);
+  }, []);
+  return (0, _arrayReduce.default)(sortedKeys, function (sortedObj, key) {
+    sortedObj[key] = obj[key];
+    return sortedObj;
+  }, {});
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","./findIndex":"../node_modules/fela-utils/es/findIndex.js","./insertAtIndex":"../node_modules/fela-utils/es/insertAtIndex.js"}],"../node_modules/fela-utils/es/getRuleScore.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getRuleScore;
+
+function getRuleScore() {
+  var ruleOrder = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var pseudo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  if (ruleOrder.length === 0 || pseudo.length === 0) {
+    return 0;
+  }
+
+  return ruleOrder.indexOf(ruleOrder.find(function (regex) {
+    return pseudo.match(regex) !== null;
+  })) + 1;
+}
+},{}],"../node_modules/fela-utils/es/styleTypes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CLEAR_TYPE = exports.STATIC_TYPE = exports.FONT_TYPE = exports.KEYFRAME_TYPE = exports.RULE_TYPE = void 0;
+var RULE_TYPE = 'RULE';
+exports.RULE_TYPE = RULE_TYPE;
+var KEYFRAME_TYPE = 'KEYFRAME';
+exports.KEYFRAME_TYPE = KEYFRAME_TYPE;
+var FONT_TYPE = 'FONT';
+exports.FONT_TYPE = FONT_TYPE;
+var STATIC_TYPE = 'STATIC';
+exports.STATIC_TYPE = STATIC_TYPE;
+var CLEAR_TYPE = 'CLEAR';
+exports.CLEAR_TYPE = CLEAR_TYPE;
+},{}],"../node_modules/fela-utils/es/clusterCache.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = clusterCache;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _generateCSSRule = _interopRequireDefault(require("./generateCSSRule"));
+
+var _objectSortByScore = _interopRequireDefault(require("./objectSortByScore"));
+
+var _getRuleScore = _interopRequireDefault(require("./getRuleScore"));
+
+var _styleTypes = require("./styleTypes");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _handlers;
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+var handlers = (_handlers = {}, _defineProperty(_handlers, _styleTypes.RULE_TYPE, function (cluster, _ref) {
+  var selector = _ref.selector,
+      declaration = _ref.declaration,
+      support = _ref.support,
+      media = _ref.media;
+  var cssRule = (0, _generateCSSRule.default)(selector, declaration);
+
+  if (support) {
+    if (media) {
+      if (!cluster.supportMediaRules[media]) {
+        cluster.supportMediaRules[media] = {};
+      }
+
+      if (!cluster.supportMediaRules[media][support]) {
+        cluster.supportMediaRules[media][support] = '';
+      }
+
+      cluster.supportMediaRules[media][support] += cssRule;
+    } else {
+      if (!cluster.supportRules[support]) {
+        cluster.supportRules[support] = '';
+      }
+
+      cluster.supportRules[support] += cssRule;
+    }
+  } else if (media) {
+    if (!cluster.mediaRules[media]) {
+      cluster.mediaRules[media] = '';
+    }
+
+    cluster.mediaRules[media] += cssRule;
+  } else {
+    cluster.rules += cssRule;
+  }
+}), _defineProperty(_handlers, _styleTypes.FONT_TYPE, function (cluster, _ref2) {
+  var fontFace = _ref2.fontFace;
+  cluster.fontFaces += fontFace;
+}), _defineProperty(_handlers, _styleTypes.KEYFRAME_TYPE, function (cluster, _ref3) {
+  var keyframe = _ref3.keyframe;
+  cluster.keyframes += keyframe;
+}), _defineProperty(_handlers, _styleTypes.STATIC_TYPE, function (cluster, _ref4) {
+  var css = _ref4.css,
+      selector = _ref4.selector;
+
+  if (selector) {
+    cluster.statics += (0, _generateCSSRule.default)(selector, css);
+  } else {
+    cluster.statics += css;
+  }
+}), _handlers);
+
+function clusterCache(cache) {
+  var ruleOrder = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var sortedCache = (0, _objectSortByScore.default)(cache, function (value) {
+    return (0, _getRuleScore.default)(ruleOrder, value.pseudo);
+  });
+  return (0, _objectReduce.default)(sortedCache, function (cluster, entry) {
+    var handler = handlers[entry.type];
+
+    if (handler) {
+      handler(cluster, entry);
+    }
+
+    return cluster;
+  }, {
+    mediaRules: {},
+    supportRules: {},
+    supportMediaRules: {},
+    fontFaces: '',
+    statics: '',
+    keyframes: '',
+    rules: ''
+  });
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","./generateCSSRule":"../node_modules/fela-utils/es/generateCSSRule.js","./objectSortByScore":"../node_modules/fela-utils/es/objectSortByScore.js","./getRuleScore":"../node_modules/fela-utils/es/getRuleScore.js","./styleTypes":"../node_modules/fela-utils/es/styleTypes.js"}],"../node_modules/fela-utils/es/generateCSSSupportRule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateCSSSupportRule;
+
+function generateCSSSupportRule(support, cssRules) {
+  return "@supports " + support + "{" + cssRules + "}";
+}
+},{}],"../node_modules/fela-utils/es/cssifySupportRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifySupportRules;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _generateCSSSupportRule = _interopRequireDefault(require("./generateCSSSupportRule"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function cssifySupportRules(supportRules) {
+  return (0, _objectReduce.default)(supportRules, function (css, cssRules, support) {
+    if (cssRules.length > 0) {
+      css += (0, _generateCSSSupportRule.default)(support, cssRules);
+    }
+
+    return css;
+  }, '');
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","./generateCSSSupportRule":"../node_modules/fela-utils/es/generateCSSSupportRule.js"}],"../node_modules/fela-utils/es/generateCombinedMediaQuery.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateCombinedMediaQuery;
+
+function generateCombinedMediaQuery(currentMediaQuery, nestedMediaQuery) {
+  if (currentMediaQuery.length === 0) {
+    return nestedMediaQuery;
+  }
+
+  return currentMediaQuery + " and " + nestedMediaQuery;
+}
+},{}],"../node_modules/fela-utils/es/generateCSSSelector.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateCSSSelector;
+
+function generateCSSSelector(className) {
+  var pseudo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  return '.' + className + pseudo;
+}
+},{}],"../node_modules/fela-utils/es/isMediaQuery.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isMediaQuery;
+
+function isMediaQuery(property) {
+  return property.substr(0, 6) === '@media';
+}
+},{}],"../node_modules/fela-utils/es/isNestedSelector.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isNestedSelector;
+var regex = /^(:|\[|>|&)/;
+
+function isNestedSelector(property) {
+  return regex.test(property);
+}
+},{}],"../node_modules/fela-utils/es/isSupport.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isSupport;
+
+function isSupport(property) {
+  return property.substr(0, 9) === '@supports';
+}
+},{}],"../node_modules/fela-utils/es/isUndefinedValue.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isUndefinedValue;
+
+function isUndefinedValue(value) {
+  return value === undefined || value === null || typeof value === 'string' && value.match(/(undefined|null)/) !== null && value.match(/url/) === null;
+}
+},{}],"../node_modules/fela-utils/es/isValidHTMLElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isValidHTMLElement;
+
+function isValidHTMLElement(mountNode) {
+  return mountNode && mountNode.nodeType === 1;
+}
+},{}],"../node_modules/fela-utils/es/normalizeNestedProperty.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = normalizeNestedProperty;
+
+function normalizeNestedProperty(nestedProperty) {
+  if (nestedProperty.charAt(0) === '&') {
+    return nestedProperty.slice(1);
+  }
+
+  return nestedProperty;
+}
+},{}],"../node_modules/fela-utils/es/processStyleWithPlugins.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = processStyleWithPlugins;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function processStyleWithPlugins(renderer, style, type) {
+  var props = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+  if (renderer.plugins.length > 0) {
+    return (0, _arrayReduce.default)(renderer.plugins, function (processedStyle, plugin) {
+      return plugin(processedStyle, type, renderer, props);
+    }, style);
+  }
+
+  return style;
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js"}],"../node_modules/css-in-js-utils/lib/camelCaseProperty.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = camelCaseProperty;
+var DASH = /-([a-z])/g;
+var MS = /^Ms/g;
+
+function toUpper(match) {
+  return match[1].toUpperCase();
+}
+
+function camelCaseProperty(property) {
+  return property.replace(DASH, toUpper).replace(MS, 'ms');
+}
+},{}],"../node_modules/fela-utils/es/generateDeclarationReference.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateDeclarationReference;
+
+var _camelCaseProperty = _interopRequireDefault(require("css-in-js-utils/lib/camelCaseProperty"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function generateDeclarationReference(property, value) {
+  var pseudo = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var media = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+  var support = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
+  return support + media + pseudo + (0, _camelCaseProperty.default)(property) + value;
+}
+},{"css-in-js-utils/lib/camelCaseProperty":"../node_modules/css-in-js-utils/lib/camelCaseProperty.js"}],"../node_modules/fela-utils/es/sheetMap.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _styleTypes = require("./styleTypes");
+
+var _default = {
+  fontFaces: _styleTypes.FONT_TYPE,
+  statics: _styleTypes.STATIC_TYPE,
+  keyframes: _styleTypes.KEYFRAME_TYPE,
+  rules: _styleTypes.RULE_TYPE
+};
+exports.default = _default;
+},{"./styleTypes":"../node_modules/fela-utils/es/styleTypes.js"}],"../node_modules/fela-utils/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "clusterCache", {
+  enumerable: true,
+  get: function () {
+    return _clusterCache.default;
+  }
+});
+Object.defineProperty(exports, "cssifySupportRules", {
+  enumerable: true,
+  get: function () {
+    return _cssifySupportRules.default;
+  }
+});
+Object.defineProperty(exports, "generateCombinedMediaQuery", {
+  enumerable: true,
+  get: function () {
+    return _generateCombinedMediaQuery.default;
+  }
+});
+Object.defineProperty(exports, "generateCSSRule", {
+  enumerable: true,
+  get: function () {
+    return _generateCSSRule.default;
+  }
+});
+Object.defineProperty(exports, "generateCSSSelector", {
+  enumerable: true,
+  get: function () {
+    return _generateCSSSelector.default;
+  }
+});
+Object.defineProperty(exports, "generateCSSSupportRule", {
+  enumerable: true,
+  get: function () {
+    return _generateCSSSupportRule.default;
+  }
+});
+Object.defineProperty(exports, "getRuleScore", {
+  enumerable: true,
+  get: function () {
+    return _getRuleScore.default;
+  }
+});
+Object.defineProperty(exports, "isMediaQuery", {
+  enumerable: true,
+  get: function () {
+    return _isMediaQuery.default;
+  }
+});
+Object.defineProperty(exports, "isNestedSelector", {
+  enumerable: true,
+  get: function () {
+    return _isNestedSelector.default;
+  }
+});
+Object.defineProperty(exports, "isSupport", {
+  enumerable: true,
+  get: function () {
+    return _isSupport.default;
+  }
+});
+Object.defineProperty(exports, "isUndefinedValue", {
+  enumerable: true,
+  get: function () {
+    return _isUndefinedValue.default;
+  }
+});
+Object.defineProperty(exports, "isValidHTMLElement", {
+  enumerable: true,
+  get: function () {
+    return _isValidHTMLElement.default;
+  }
+});
+Object.defineProperty(exports, "normalizeNestedProperty", {
+  enumerable: true,
+  get: function () {
+    return _normalizeNestedProperty.default;
+  }
+});
+Object.defineProperty(exports, "processStyleWithPlugins", {
+  enumerable: true,
+  get: function () {
+    return _processStyleWithPlugins.default;
+  }
+});
+Object.defineProperty(exports, "generateDeclarationReference", {
+  enumerable: true,
+  get: function () {
+    return _generateDeclarationReference.default;
+  }
+});
+Object.defineProperty(exports, "sheetMap", {
+  enumerable: true,
+  get: function () {
+    return _sheetMap.default;
+  }
+});
+Object.defineProperty(exports, "RULE_TYPE", {
+  enumerable: true,
+  get: function () {
+    return _styleTypes.RULE_TYPE;
+  }
+});
+Object.defineProperty(exports, "KEYFRAME_TYPE", {
+  enumerable: true,
+  get: function () {
+    return _styleTypes.KEYFRAME_TYPE;
+  }
+});
+Object.defineProperty(exports, "FONT_TYPE", {
+  enumerable: true,
+  get: function () {
+    return _styleTypes.FONT_TYPE;
+  }
+});
+Object.defineProperty(exports, "STATIC_TYPE", {
+  enumerable: true,
+  get: function () {
+    return _styleTypes.STATIC_TYPE;
+  }
+});
+Object.defineProperty(exports, "CLEAR_TYPE", {
+  enumerable: true,
+  get: function () {
+    return _styleTypes.CLEAR_TYPE;
+  }
+});
+
+var _clusterCache = _interopRequireDefault(require("./clusterCache"));
+
+var _cssifySupportRules = _interopRequireDefault(require("./cssifySupportRules"));
+
+var _generateCombinedMediaQuery = _interopRequireDefault(require("./generateCombinedMediaQuery"));
+
+var _generateCSSRule = _interopRequireDefault(require("./generateCSSRule"));
+
+var _generateCSSSelector = _interopRequireDefault(require("./generateCSSSelector"));
+
+var _generateCSSSupportRule = _interopRequireDefault(require("./generateCSSSupportRule"));
+
+var _getRuleScore = _interopRequireDefault(require("./getRuleScore"));
+
+var _isMediaQuery = _interopRequireDefault(require("./isMediaQuery"));
+
+var _isNestedSelector = _interopRequireDefault(require("./isNestedSelector"));
+
+var _isSupport = _interopRequireDefault(require("./isSupport"));
+
+var _isUndefinedValue = _interopRequireDefault(require("./isUndefinedValue"));
+
+var _isValidHTMLElement = _interopRequireDefault(require("./isValidHTMLElement"));
+
+var _normalizeNestedProperty = _interopRequireDefault(require("./normalizeNestedProperty"));
+
+var _processStyleWithPlugins = _interopRequireDefault(require("./processStyleWithPlugins"));
+
+var _generateDeclarationReference = _interopRequireDefault(require("./generateDeclarationReference"));
+
+var _sheetMap = _interopRequireDefault(require("./sheetMap"));
+
+var _styleTypes = require("./styleTypes");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./clusterCache":"../node_modules/fela-utils/es/clusterCache.js","./cssifySupportRules":"../node_modules/fela-utils/es/cssifySupportRules.js","./generateCombinedMediaQuery":"../node_modules/fela-utils/es/generateCombinedMediaQuery.js","./generateCSSRule":"../node_modules/fela-utils/es/generateCSSRule.js","./generateCSSSelector":"../node_modules/fela-utils/es/generateCSSSelector.js","./generateCSSSupportRule":"../node_modules/fela-utils/es/generateCSSSupportRule.js","./getRuleScore":"../node_modules/fela-utils/es/getRuleScore.js","./isMediaQuery":"../node_modules/fela-utils/es/isMediaQuery.js","./isNestedSelector":"../node_modules/fela-utils/es/isNestedSelector.js","./isSupport":"../node_modules/fela-utils/es/isSupport.js","./isUndefinedValue":"../node_modules/fela-utils/es/isUndefinedValue.js","./isValidHTMLElement":"../node_modules/fela-utils/es/isValidHTMLElement.js","./normalizeNestedProperty":"../node_modules/fela-utils/es/normalizeNestedProperty.js","./processStyleWithPlugins":"../node_modules/fela-utils/es/processStyleWithPlugins.js","./generateDeclarationReference":"../node_modules/fela-utils/es/generateDeclarationReference.js","./sheetMap":"../node_modules/fela-utils/es/sheetMap.js","./styleTypes":"../node_modules/fela-utils/es/styleTypes.js"}],"../node_modules/fela-tools/es/cssifyMediaQueryRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifyMediaQueryRules;
+
+function cssifyMediaQueryRules(mediaQuery, mediaQueryRules) {
+  if (mediaQueryRules) {
+    return '@media ' + mediaQuery + '{' + mediaQueryRules + '}';
+  }
+
+  return '';
+}
+},{}],"../node_modules/fela-tools/es/renderToString.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = renderToString;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _felaUtils = require("fela-utils");
+
+var _cssifyMediaQueryRules = _interopRequireDefault(require("./cssifyMediaQueryRules"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function renderToString(renderer) {
+  var _clusterCache = (0, _felaUtils.clusterCache)(renderer.cache, renderer.ruleOrder),
+      fontFaces = _clusterCache.fontFaces,
+      statics = _clusterCache.statics,
+      keyframes = _clusterCache.keyframes,
+      rules = _clusterCache.rules,
+      mediaRules = _clusterCache.mediaRules,
+      supportRules = _clusterCache.supportRules,
+      supportMediaRules = _clusterCache.supportMediaRules;
+
+  var basicCSS = fontFaces + statics + keyframes + rules + (0, _felaUtils.cssifySupportRules)(supportRules);
+  var mediaKeys = Object.keys(_extends({}, supportMediaRules, mediaRules)).sort(renderer.sortMediaQuery);
+  return (0, _arrayReduce.default)(mediaKeys, function (css, query) {
+    var mediaCSS = mediaRules[query] || '';
+    var supportCSS = (0, _felaUtils.cssifySupportRules)(supportMediaRules[query] || {});
+    return css + (0, _cssifyMediaQueryRules.default)(query, mediaCSS + supportCSS);
+  }, basicCSS);
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fela-utils":"../node_modules/fela-utils/es/index.js","./cssifyMediaQueryRules":"../node_modules/fela-tools/es/cssifyMediaQueryRules.js"}],"../node_modules/fela-tools/es/renderToElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = renderToElement;
+
+var _felaUtils = require("fela-utils");
+
+var _renderToString = _interopRequireDefault(require("./renderToString"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function renderToElement(renderer, mountNode) {
+  // mountNode must be a valid HTML element to be able
+  // to set mountNode.textContent later on
+  if (!(0, _felaUtils.isValidHTMLElement)(mountNode)) {
+    throw new Error('You need to specify a valid element node (mountNode.nodeType = 1) to render into.');
+  }
+
+  var css = (0, _renderToString.default)(renderer);
+
+  if (mountNode.textContent !== css) {
+    // render currently rendered styles to the DOM once
+    mountNode.textContent = css;
+  }
+
+  return renderer.subscribe(function () {
+    mountNode.textContent = (0, _renderToString.default)(renderer);
+  });
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js","./renderToString":"../node_modules/fela-tools/es/renderToString.js"}],"../node_modules/hyphenate-style-name/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+/* eslint-disable no-var, prefer-template */
+var uppercasePattern = /[A-Z]/g;
+var msPattern = /^ms-/;
+var cache = {};
+
+function toHyphenLower(match) {
+  return '-' + match.toLowerCase();
+}
+
+function hyphenateStyleName(name) {
+  if (cache.hasOwnProperty(name)) {
+    return cache[name];
+  }
+
+  var hName = name.replace(uppercasePattern, toHyphenLower);
+  return cache[name] = msPattern.test(hName) ? '-' + hName : hName;
+}
+
+var _default = hyphenateStyleName;
+exports.default = _default;
+},{}],"../node_modules/css-in-js-utils/lib/hyphenateProperty.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = hyphenateProperty;
+
+var _hyphenateStyleName = require("hyphenate-style-name");
+
+var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function hyphenateProperty(property) {
+  return (0, _hyphenateStyleName2["default"])(property);
+}
+},{"hyphenate-style-name":"../node_modules/hyphenate-style-name/index.js"}],"../node_modules/css-in-js-utils/lib/cssifyDeclaration.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = cssifyDeclaration;
+
+var _hyphenateProperty = require("./hyphenateProperty");
+
+var _hyphenateProperty2 = _interopRequireDefault(_hyphenateProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function cssifyDeclaration(property, value) {
+  return (0, _hyphenateProperty2["default"])(property) + ':' + value;
+}
+},{"./hyphenateProperty":"../node_modules/css-in-js-utils/lib/hyphenateProperty.js"}],"../node_modules/fast-loops/lib/arrayEach.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = arrayEach;
+
+function arrayEach(arr, iterator) {
+  for (var i = 0, len = arr.length; i < len; ++i) {
+    iterator(arr[i], i, len, arr);
+  }
+}
+},{}],"../node_modules/isobject/index.js":[function(require,module,exports) {
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+'use strict';
+
+module.exports = function isObject(val) {
+  return val != null && typeof val === 'object' && Array.isArray(val) === false;
+};
+},{}],"../node_modules/css-in-js-utils/lib/cssifyObject.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = cssifyObject;
+
+var _cssifyDeclaration = require("./cssifyDeclaration");
+
+var _cssifyDeclaration2 = _interopRequireDefault(_cssifyDeclaration);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function cssifyObject(style) {
+  var css = '';
+
+  for (var property in style) {
+    var value = style[property];
+
+    if (typeof value !== 'string' && typeof value !== 'number') {
+      continue;
+    } // prevents the semicolon after
+    // the last rule declaration
+
+
+    if (css) {
+      css += ';';
+    }
+
+    css += (0, _cssifyDeclaration2["default"])(property, value);
+  }
+
+  return css;
+}
+},{"./cssifyDeclaration":"../node_modules/css-in-js-utils/lib/cssifyDeclaration.js"}],"../node_modules/fela/es/cssifyFontFace.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifyFontFace;
+
+var _cssifyObject = _interopRequireDefault(require("css-in-js-utils/lib/cssifyObject"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function cssifyFontFace(fontFace) {
+  return '@font-face{' + (0, _cssifyObject.default)(fontFace) + '}';
+}
+},{"css-in-js-utils/lib/cssifyObject":"../node_modules/css-in-js-utils/lib/cssifyObject.js"}],"../node_modules/fela/es/cssifyKeyframeRule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifyKeyframeRule;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _cssifyObject = _interopRequireDefault(require("css-in-js-utils/lib/cssifyObject"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function cssifyKeyframeRule(frames) {
+  return (0, _objectReduce.default)(frames, function (css, frame, percentage) {
+    return '' + css + percentage + '{' + (0, _cssifyObject.default)(frame) + '}';
+  }, '');
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","css-in-js-utils/lib/cssifyObject":"../node_modules/css-in-js-utils/lib/cssifyObject.js"}],"../node_modules/fela/es/cssifyKeyframe.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifyKeyframe;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _cssifyKeyframeRule = _interopRequireDefault(require("./cssifyKeyframeRule"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function cssifyKeyframe(frames, animationName) {
+  var prefixes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [''];
+  var prerendered = arguments[3];
+  var keyframe = prerendered || (0, _cssifyKeyframeRule.default)(frames);
+  return (0, _arrayReduce.default)(prefixes, function (cssKeyframe, prefix) {
+    return cssKeyframe + '@' + prefix + 'keyframes ' + animationName + '{' + keyframe + '}';
+  }, '');
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","./cssifyKeyframeRule":"../node_modules/fela/es/cssifyKeyframeRule.js"}],"../node_modules/fela/es/minifyCSSString.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = minifyCSSString;
+
+function minifyCSSString(style) {
+  return style.replace(/\s{2,}/g, '');
+}
+},{}],"../node_modules/fela/es/cssifyStaticStyle.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = cssifyStaticStyle;
+
+var _cssifyObject = _interopRequireDefault(require("css-in-js-utils/lib/cssifyObject"));
+
+var _felaUtils = require("fela-utils");
+
+var _minifyCSSString = _interopRequireDefault(require("./minifyCSSString"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function cssifyStaticStyle(staticStyle, renderer) {
+  if (typeof staticStyle === 'string') {
+    return (0, _minifyCSSString.default)(staticStyle);
+  }
+
+  var processedStaticStyle = (0, _felaUtils.processStyleWithPlugins)(renderer, staticStyle, _felaUtils.STATIC_TYPE);
+  return (0, _cssifyObject.default)(processedStaticStyle);
+}
+},{"css-in-js-utils/lib/cssifyObject":"../node_modules/css-in-js-utils/lib/cssifyObject.js","fela-utils":"../node_modules/fela-utils/es/index.js","./minifyCSSString":"../node_modules/fela/es/minifyCSSString.js"}],"../node_modules/fela/es/generateAnimationName.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateAnimationName;
+
+function generateAnimationName(id) {
+  return 'k' + id;
+}
+},{}],"../node_modules/fela/es/generateClassName.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateClassName;
+var chars = 'abcdefghijklmnopqrstuvwxyz';
+var charLength = chars.length;
+
+function generateUniqueClassName(id) {
+  var className = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  if (id <= charLength) {
+    return chars[id - 1] + className;
+  } // Bitwise floor as safari performs much faster
+  // https://jsperf.com/math-floor-vs-math-round-vs-parseint/55
+
+
+  return generateUniqueClassName(id / charLength | 0, chars[id % charLength] + className);
+}
+
+function generateClassName(getId) {
+  var filterClassName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
+    return true;
+  };
+  var startId = getId();
+  var generatedClassName = generateUniqueClassName(startId);
+
+  if (!filterClassName(generatedClassName)) {
+    return generateClassName(getId, filterClassName);
+  }
+
+  return generatedClassName;
+}
+},{}],"../node_modules/fela/es/isBase64.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isBase64;
+
+function isBase64(property) {
+  return property.substr(0, 5) === 'data:';
+}
+},{}],"../node_modules/fela/es/getFontUrl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getFontUrl;
+
+var _isBase = _interopRequireDefault(require("./isBase64"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getFontUrl(src) {
+  if ((0, _isBase.default)(src)) {
+    return src;
+  }
+
+  return '\'' + src + '\'';
+}
+},{"./isBase64":"../node_modules/fela/es/isBase64.js"}],"../node_modules/fela/es/getFontFormat.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getFontFormat;
+
+var _isBase = _interopRequireDefault(require("./isBase64"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var formats = {
+  '.woff': 'woff',
+  '.woff2': 'woff2',
+  '.eot': 'embedded-opentype',
+  '.ttf': 'truetype',
+  '.otf': 'opentype',
+  '.svg': 'svg',
+  '.svgz': 'svg'
+};
+var base64Formats = {
+  'image/svg+xml': 'svg',
+  'application/x-font-woff': 'woff',
+  'application/font-woff': 'woff',
+  'application/x-font-woff2': 'woff2',
+  'application/font-woff2': 'woff2',
+  'font/woff2': 'woff2',
+  'application/octet-stream': 'truetype',
+  'application/x-font-ttf': 'truetype',
+  'application/x-font-truetype': 'truetype',
+  'application/x-font-opentype': 'opentype',
+  'application/vnd.ms-fontobject': 'embedded-opentype',
+  'application/font-sfnt': 'sfnt'
+};
+
+function getFontFormat(src) {
+  if ((0, _isBase.default)(src)) {
+    var mime = '';
+
+    for (var i = 5;; i++) {
+      // 'data:'.length === 5
+      var c = src.charAt(i);
+
+      if (c === ';' || c === ',') {
+        break;
+      }
+
+      mime += c;
+    }
+
+    var fmt = base64Formats[mime];
+
+    if (fmt) {
+      return fmt;
+    }
+
+    console.warn('A invalid base64 font was used. Please use one of the following mime type: ' + Object.keys(base64Formats).join(', ') + '.');
+  } else {
+    var extension = '';
+
+    for (var _i = src.length - 1;; _i--) {
+      var _c = src.charAt(_i);
+
+      if (_c === '.') {
+        extension = _c + extension;
+        break;
+      }
+
+      extension = _c + extension;
+    }
+
+    var _fmt = formats[extension];
+
+    if (_fmt) {
+      return _fmt;
+    }
+
+    console.warn('A invalid font-format was used in "' + src + '". Use one of these: ' + Object.keys(formats).join(', ') + '.');
+  }
+
+  return '';
+}
+},{"./isBase64":"../node_modules/fela/es/isBase64.js"}],"../node_modules/fela/es/generateFontSource.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateFontSource;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _getFontUrl = _interopRequireDefault(require("./getFontUrl"));
+
+var _getFontFormat = _interopRequireDefault(require("./getFontFormat"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function generateFontSource() {
+  var files = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var fontLocals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var localSource = (0, _arrayReduce.default)(fontLocals, function (src, local, index) {
+    var prefix = index > 0 ? ',' : '';
+    var localUrl = (0, _getFontUrl.default)(local);
+    return '' + src + prefix + 'local(' + localUrl + ')';
+  }, '');
+  var urlSource = (0, _arrayReduce.default)(files, function (src, fileSource, index) {
+    var prefix = index > 0 ? ',' : '';
+    var fileFormat = (0, _getFontFormat.default)(fileSource);
+    var fileUrl = (0, _getFontUrl.default)(fileSource);
+    return '' + src + prefix + 'url(' + fileUrl + ') format(\'' + fileFormat + '\')';
+  }, '');
+  var delimiter = localSource.length > 0 && urlSource.length > 0 ? ',' : '';
+  return '' + localSource + delimiter + urlSource;
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","./getFontUrl":"../node_modules/fela/es/getFontUrl.js","./getFontFormat":"../node_modules/fela/es/getFontFormat.js"}],"../node_modules/fela/es/generateStaticReference.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateStaticReference;
+
+function generateStaticReference(style, selector) {
+  if (typeof style === 'string') {
+    return style;
+  }
+
+  if (selector) {
+    return selector + JSON.stringify(style);
+  }
+
+  return '';
+}
+},{}],"../node_modules/fela/es/getFontLocals.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getFontLocals;
+
+function getFontLocals(localAlias) {
+  if (typeof localAlias === 'string') {
+    return [localAlias];
+  }
+
+  if (Array.isArray(localAlias)) {
+    return localAlias.slice();
+  }
+
+  return [];
+}
+},{}],"../node_modules/fela/es/isSafeClassName.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isSafeClassName;
+
+function isSafeClassName(className) {
+  return className.indexOf('ad') === -1;
+}
+},{}],"../node_modules/fela/es/toCSSString.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = toCSSString;
+
+function toCSSString(value) {
+  if (value.charAt(0) === '"') {
+    return value;
+  }
+
+  return '"' + value + '"';
+}
+},{}],"../node_modules/fela/es/validateSelectorPrefix.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = validateSelectorPrefix;
+var PREFIX_SYNTAX = /^[a-z_][a-z0-9-_]*$/gi;
+
+function validateSelectorPrefix() {
+  var selectorPrefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+  if (selectorPrefix.length > 0 && selectorPrefix.match(PREFIX_SYNTAX) === null) {
+    console.error('An invalid selectorPrefix (' + selectorPrefix + ') has been used to create a new Fela renderer.\nIt must only contain a-Z, 0-9, - and _ while it must start with either _ or a-Z.\nSee http://fela.js.org/docs/advanced/RendererConfiguration.html');
+  }
+
+  return selectorPrefix;
+}
+},{}],"../node_modules/fela/es/createRenderer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createRenderer;
+
+var _cssifyDeclaration = _interopRequireDefault(require("css-in-js-utils/lib/cssifyDeclaration"));
+
+var _arrayEach = _interopRequireDefault(require("fast-loops/lib/arrayEach"));
+
+var _isobject = _interopRequireDefault(require("isobject"));
+
+var _felaUtils = require("fela-utils");
+
+var _cssifyFontFace = _interopRequireDefault(require("./cssifyFontFace"));
+
+var _cssifyKeyframe = _interopRequireDefault(require("./cssifyKeyframe"));
+
+var _cssifyKeyframeRule = _interopRequireDefault(require("./cssifyKeyframeRule"));
+
+var _cssifyStaticStyle = _interopRequireDefault(require("./cssifyStaticStyle"));
+
+var _generateAnimationName2 = _interopRequireDefault(require("./generateAnimationName"));
+
+var _generateClassName2 = _interopRequireDefault(require("./generateClassName"));
+
+var _generateFontSource = _interopRequireDefault(require("./generateFontSource"));
+
+var _generateStaticReference = _interopRequireDefault(require("./generateStaticReference"));
+
+var _getFontLocals = _interopRequireDefault(require("./getFontLocals"));
+
+var _isSafeClassName = _interopRequireDefault(require("./isSafeClassName"));
+
+var _toCSSString = _interopRequireDefault(require("./toCSSString"));
+
+var _validateSelectorPrefix = _interopRequireDefault(require("./validateSelectorPrefix"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+}
+
+var sortMediaQuery = function sortMediaQuery() {
+  var mediaQueryOrder = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  return function (a, b) {
+    if (mediaQueryOrder.indexOf(b) === -1) {
+      if (mediaQueryOrder.indexOf(a) === -1) {
+        return 0;
+      }
+
+      return -1;
+    }
+
+    if (mediaQueryOrder.indexOf(a) === -1) {
+      return 1;
+    }
+
+    return mediaQueryOrder.indexOf(a) - mediaQueryOrder.indexOf(b);
+  };
+};
+
+function createRenderer() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var renderer = {
+    listeners: [],
+    keyframePrefixes: config.keyframePrefixes || ['-webkit-', '-moz-'],
+    plugins: config.plugins || [],
+    sortMediaQuery: config.sortMediaQuery || sortMediaQuery(config.mediaQueryOrder),
+    supportQueryOrder: config.supportQueryOrder || [],
+    styleNodeAttributes: config.styleNodeAttributes || {},
+    ruleOrder: [/^:link/, /^:visited/, /^:hover/, /^:focus-within/, /^:focus/, /^:active/],
+    selectorPrefix: (0, _validateSelectorPrefix.default)(config.selectorPrefix),
+    filterClassName: config.filterClassName || _isSafeClassName.default,
+    devMode: config.devMode || false,
+    uniqueRuleIdentifier: 0,
+    uniqueKeyframeIdentifier: 0,
+    nodes: {},
+    scoreIndex: {},
+    // use a flat cache object with pure string references
+    // to achieve maximal lookup performance and memoization speed
+    cache: {},
+    getNextRuleIdentifier: function getNextRuleIdentifier() {
+      return ++renderer.uniqueRuleIdentifier;
+    },
+    getNextKeyframeIdentifier: function getNextKeyframeIdentifier() {
+      return ++renderer.uniqueKeyframeIdentifier;
+    },
+    renderRule: function renderRule(rule) {
+      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      return renderer._renderStyle(rule(props, renderer), props);
+    },
+    renderKeyframe: function renderKeyframe(keyframe) {
+      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var resolvedKeyframe = keyframe(props, renderer);
+      var processedKeyframe = (0, _felaUtils.processStyleWithPlugins)(renderer, resolvedKeyframe, _felaUtils.KEYFRAME_TYPE, props);
+      var keyframeReference = (0, _cssifyKeyframeRule.default)(processedKeyframe);
+
+      if (!renderer.cache.hasOwnProperty(keyframeReference)) {
+        // use another unique identifier to ensure minimal css markup
+        var animationName = renderer.selectorPrefix + renderer.generateAnimationName(props);
+        var cssKeyframe = (0, _cssifyKeyframe.default)(processedKeyframe, animationName, renderer.keyframePrefixes, keyframeReference);
+        var change = {
+          type: _felaUtils.KEYFRAME_TYPE,
+          keyframe: cssKeyframe,
+          name: animationName
+        };
+        renderer.cache[keyframeReference] = change;
+
+        renderer._emitChange(change);
+      }
+
+      return renderer.cache[keyframeReference].name;
+    },
+    generateAnimationName: function generateAnimationName(_props) {
+      return (0, _generateAnimationName2.default)(renderer.getNextKeyframeIdentifier());
+    },
+    renderFont: function renderFont(family, files) {
+      var properties = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      var localAlias = properties.localAlias,
+          otherProperties = _objectWithoutProperties(properties, ['localAlias']);
+
+      var fontReference = family + JSON.stringify(properties);
+      var fontLocals = (0, _getFontLocals.default)(localAlias);
+
+      if (!renderer.cache.hasOwnProperty(fontReference)) {
+        var fontFamily = (0, _toCSSString.default)(family);
+
+        var fontFace = _extends({}, otherProperties, {
+          src: (0, _generateFontSource.default)(files, fontLocals),
+          fontFamily: fontFamily
+        });
+
+        var cssFontFace = (0, _cssifyFontFace.default)(fontFace);
+        var change = {
+          type: _felaUtils.FONT_TYPE,
+          fontFace: cssFontFace,
+          fontFamily: fontFamily
+        };
+        renderer.cache[fontReference] = change;
+
+        renderer._emitChange(change);
+      }
+
+      return renderer.cache[fontReference].fontFamily;
+    },
+    renderStatic: function renderStatic(staticStyle, selector) {
+      var staticReference = (0, _generateStaticReference.default)(staticStyle, selector);
+
+      if (!renderer.cache.hasOwnProperty(staticReference)) {
+        var cssDeclarations = (0, _cssifyStaticStyle.default)(staticStyle, renderer);
+        var change = {
+          type: _felaUtils.STATIC_TYPE,
+          css: cssDeclarations,
+          selector: selector
+        };
+        renderer.cache[staticReference] = change;
+
+        renderer._emitChange(change);
+      }
+    },
+    subscribe: function subscribe(callback) {
+      renderer.listeners.push(callback);
+      return {
+        unsubscribe: function unsubscribe() {
+          return renderer.listeners.splice(renderer.listeners.indexOf(callback), 1);
+        }
+      };
+    },
+    clear: function clear() {
+      renderer.uniqueRuleIdentifier = 0;
+      renderer.uniqueKeyframeIdentifier = 0;
+      renderer.cache = {};
+
+      renderer._emitChange({
+        type: _felaUtils.CLEAR_TYPE
+      });
+    },
+    _renderStyle: function _renderStyle() {
+      var style = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var processedStyle = (0, _felaUtils.processStyleWithPlugins)(renderer, style, _felaUtils.RULE_TYPE, props);
+      return renderer._renderStyleToClassNames(processedStyle).slice(1);
+    },
+    _renderStyleToClassNames: function _renderStyleToClassNames(_ref) {
+      var pseudo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+      var media = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+      var support = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '';
+
+      var _className = _ref._className,
+          style = _objectWithoutProperties(_ref, ['_className']);
+
+      var classNames = _className ? ' ' + _className : '';
+
+      for (var property in style) {
+        var value = style[property];
+
+        if ((0, _isobject.default)(value)) {
+          if ((0, _felaUtils.isNestedSelector)(property)) {
+            classNames += renderer._renderStyleToClassNames(value, pseudo + (0, _felaUtils.normalizeNestedProperty)(property), media, support);
+          } else if ((0, _felaUtils.isMediaQuery)(property)) {
+            var combinedMediaQuery = (0, _felaUtils.generateCombinedMediaQuery)(media, property.slice(6).trim());
+            classNames += renderer._renderStyleToClassNames(value, pseudo, combinedMediaQuery, support);
+          } else if ((0, _felaUtils.isSupport)(property)) {
+            var combinedSupport = (0, _felaUtils.generateCombinedMediaQuery)(support, property.slice(9).trim());
+            classNames += renderer._renderStyleToClassNames(value, pseudo, media, combinedSupport);
+          } else {
+            console.warn('The object key "' + property + '" is not a valid nested key in Fela.\nMaybe you forgot to add a plugin to resolve it?\nCheck http://fela.js.org/docs/basics/Rules.html#styleobject for more information.');
+          }
+        } else {
+          var declarationReference = (0, _felaUtils.generateDeclarationReference)(property, value, pseudo, media, support);
+
+          if (!renderer.cache.hasOwnProperty(declarationReference)) {
+            // we remove undefined values to enable
+            // usage of optional props without side-effects
+            if ((0, _felaUtils.isUndefinedValue)(value)) {
+              renderer.cache[declarationReference] = {
+                className: ''
+                /* eslint-disable no-continue */
+
+              };
+              continue;
+              /* eslint-enable */
+            }
+
+            var className = renderer.selectorPrefix + renderer.generateClassName(property, value, pseudo, media, support);
+            var declaration = (0, _cssifyDeclaration.default)(property, value);
+            var selector = (0, _felaUtils.generateCSSSelector)(className, pseudo);
+            var change = {
+              type: _felaUtils.RULE_TYPE,
+              className: className,
+              selector: selector,
+              declaration: declaration,
+              pseudo: pseudo,
+              media: media,
+              support: support
+            };
+            renderer.cache[declarationReference] = change;
+
+            renderer._emitChange(change);
+          }
+
+          var cachedClassName = renderer.cache[declarationReference].className; // only append if we got a class cached
+
+          if (cachedClassName) {
+            classNames += ' ' + cachedClassName;
+          }
+        }
+      }
+
+      return classNames;
+    },
+    generateClassName: function generateClassName(_property, _value, _pseudo, _media, _support) {
+      return (0, _generateClassName2.default)(renderer.getNextRuleIdentifier, renderer.filterClassName);
+    },
+    _emitChange: function _emitChange(change) {
+      (0, _arrayEach.default)(renderer.listeners, function (listener) {
+        return listener(change);
+      });
+    }
+  }; // initial setup
+
+  renderer.keyframePrefixes.push('');
+
+  if (config.enhancers) {
+    (0, _arrayEach.default)(config.enhancers, function (enhancer) {
+      renderer = enhancer(renderer);
+    });
+  }
+
+  return renderer;
+}
+},{"css-in-js-utils/lib/cssifyDeclaration":"../node_modules/css-in-js-utils/lib/cssifyDeclaration.js","fast-loops/lib/arrayEach":"../node_modules/fast-loops/lib/arrayEach.js","isobject":"../node_modules/isobject/index.js","fela-utils":"../node_modules/fela-utils/es/index.js","./cssifyFontFace":"../node_modules/fela/es/cssifyFontFace.js","./cssifyKeyframe":"../node_modules/fela/es/cssifyKeyframe.js","./cssifyKeyframeRule":"../node_modules/fela/es/cssifyKeyframeRule.js","./cssifyStaticStyle":"../node_modules/fela/es/cssifyStaticStyle.js","./generateAnimationName":"../node_modules/fela/es/generateAnimationName.js","./generateClassName":"../node_modules/fela/es/generateClassName.js","./generateFontSource":"../node_modules/fela/es/generateFontSource.js","./generateStaticReference":"../node_modules/fela/es/generateStaticReference.js","./getFontLocals":"../node_modules/fela/es/getFontLocals.js","./isSafeClassName":"../node_modules/fela/es/isSafeClassName.js","./toCSSString":"../node_modules/fela/es/toCSSString.js","./validateSelectorPrefix":"../node_modules/fela/es/validateSelectorPrefix.js"}],"../node_modules/css-in-js-utils/lib/assignStyle.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = assignStyle;
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function filterUniqueArray(arr) {
+  return arr.filter(function (val, index) {
+    return arr.lastIndexOf(val) === index;
+  });
+}
+
+function assignStyle(base) {
+  for (var i = 0, len = arguments.length <= 1 ? 0 : arguments.length - 1; i < len; ++i) {
+    var style = i + 1 < 1 || arguments.length <= i + 1 ? undefined : arguments[i + 1];
+
+    for (var property in style) {
+      var value = style[property];
+      var baseValue = base[property];
+
+      if (baseValue && value) {
+        if (Array.isArray(baseValue)) {
+          base[property] = filterUniqueArray(baseValue.concat(value));
+          continue;
+        }
+
+        if (Array.isArray(value)) {
+          base[property] = filterUniqueArray([baseValue].concat(_toConsumableArray(value)));
+          continue;
+        }
+
+        if (_typeof(value) === 'object') {
+          base[property] = assignStyle({}, baseValue, value);
+          continue;
+        }
+      }
+
+      base[property] = value;
+    }
+  }
+
+  return base;
+}
+},{}],"../node_modules/fela/es/combineRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = combineRules;
+
+var _assignStyle = _interopRequireDefault(require("css-in-js-utils/lib/assignStyle"));
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function resolveRule(rule, props, renderer) {
+  if (Array.isArray(rule)) {
+    return resolveRule(combineRules.apply(undefined, _toConsumableArray(rule)), props, renderer);
+  }
+
+  if (typeof rule === 'function') {
+    return rule(props, renderer);
+  }
+
+  return rule;
+}
+
+function combineRules() {
+  for (var _len = arguments.length, rules = Array(_len), _key = 0; _key < _len; _key++) {
+    rules[_key] = arguments[_key];
+  }
+
+  return function (props, renderer) {
+    return (0, _arrayReduce.default)(rules, function (style, rule) {
+      var resolvedRule = resolveRule(rule, props, renderer); // special combination of our special _className key
+
+      if (resolvedRule && style._className) {
+        resolvedRule._className = style._className + (resolvedRule._className ? ' ' + resolvedRule._className : '');
+      }
+
+      return (0, _assignStyle.default)(style, resolvedRule);
+    }, {});
+  };
+}
+},{"css-in-js-utils/lib/assignStyle":"../node_modules/css-in-js-utils/lib/assignStyle.js","fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js"}],"../node_modules/fela/es/enhance.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = enhance;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function enhance() {
+  for (var _len = arguments.length, enhancers = Array(_len), _key = 0; _key < _len; _key++) {
+    enhancers[_key] = arguments[_key];
+  }
+
+  return function (createRenderer) {
+    return function (config) {
+      return (0, _arrayReduce.default)(enhancers, function (enhancedRenderer, enhancer) {
+        enhancedRenderer = enhancer(enhancedRenderer);
+        return enhancedRenderer;
+      }, createRenderer(config));
+    };
+  };
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js"}],"../node_modules/fela/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "createRenderer", {
+  enumerable: true,
+  get: function () {
+    return _createRenderer.default;
+  }
+});
+Object.defineProperty(exports, "combineRules", {
+  enumerable: true,
+  get: function () {
+    return _combineRules.default;
+  }
+});
+Object.defineProperty(exports, "enhance", {
+  enumerable: true,
+  get: function () {
+    return _enhance.default;
+  }
+});
+
+var _createRenderer = _interopRequireDefault(require("./createRenderer"));
+
+var _combineRules = _interopRequireDefault(require("./combineRules"));
+
+var _enhance = _interopRequireDefault(require("./enhance"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./createRenderer":"../node_modules/fela/es/createRenderer.js","./combineRules":"../node_modules/fela/es/combineRules.js","./enhance":"../node_modules/fela/es/enhance.js"}],"../node_modules/fela-tools/es/combineMultiRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = combineMultiRules;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _fela = require("fela");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function safeRule(ruleOrObject) {
+  return typeof ruleOrObject === 'function' ? ruleOrObject : function () {
+    return ruleOrObject;
+  };
+}
+
+function combineMultiRules() {
+  for (var _len = arguments.length, multiRules = Array(_len), _key = 0; _key < _len; _key++) {
+    multiRules[_key] = arguments[_key];
+  }
+
+  return function (props, renderer) {
+    return (0, _arrayReduce.default)(multiRules, function (resultStyleMap, multiRule) {
+      return _extends({}, resultStyleMap, (0, _objectReduce.default)(safeRule(multiRule)(props, renderer), function (styleMap, rule, name) {
+        return _extends({}, styleMap, _defineProperty({}, name, resultStyleMap[name] ? (0, _fela.combineRules)(resultStyleMap[name], safeRule(rule)) : safeRule(rule)));
+      }, {}));
+    }, {});
+  };
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fela":"../node_modules/fela/es/index.js"}],"../node_modules/fela-tools/es/StyleSheet.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = {
+  create: function create(styleSheet) {
+    return (0, _objectReduce.default)(styleSheet, function (ruleSheet, rule, ruleName) {
+      if (typeof rule === 'function') {
+        ruleSheet[ruleName] = rule;
+      } else {
+        ruleSheet[ruleName] = function () {
+          return rule;
+        };
+
+        ruleSheet[ruleName].ruleName = ruleName;
+      }
+
+      return ruleSheet;
+    }, {});
+  }
+};
+exports.default = _default;
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js"}],"../node_modules/fela-tools/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "mapValueToMediaQuery", {
+  enumerable: true,
+  get: function () {
+    return _mapValueToMediaQuery.default;
+  }
+});
+Object.defineProperty(exports, "renderToElement", {
+  enumerable: true,
+  get: function () {
+    return _renderToElement.default;
+  }
+});
+Object.defineProperty(exports, "renderToString", {
+  enumerable: true,
+  get: function () {
+    return _renderToString.default;
+  }
+});
+Object.defineProperty(exports, "combineMultiRules", {
+  enumerable: true,
+  get: function () {
+    return _combineMultiRules.default;
+  }
+});
+Object.defineProperty(exports, "StyleSheet", {
+  enumerable: true,
+  get: function () {
+    return _StyleSheet.default;
+  }
+});
+
+var _mapValueToMediaQuery = _interopRequireDefault(require("./mapValueToMediaQuery"));
+
+var _renderToElement = _interopRequireDefault(require("./renderToElement"));
+
+var _renderToString = _interopRequireDefault(require("./renderToString"));
+
+var _combineMultiRules = _interopRequireDefault(require("./combineMultiRules"));
+
+var _StyleSheet = _interopRequireDefault(require("./StyleSheet"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./mapValueToMediaQuery":"../node_modules/fela-tools/es/mapValueToMediaQuery.js","./renderToElement":"../node_modules/fela-tools/es/renderToElement.js","./renderToString":"../node_modules/fela-tools/es/renderToString.js","./combineMultiRules":"../node_modules/fela-tools/es/combineMultiRules.js","./StyleSheet":"../node_modules/fela-tools/es/StyleSheet.js"}],"../node_modules/fbjs/lib/shallowEqual.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/*eslint-disable no-self-compare */
+
+'use strict';
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+/**
+ * inlined Object.is polyfill to avoid requiring consumers ship their own
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+ */
+function is(x, y) {
+  // SameValue algorithm
+  if (x === y) {
+    // Steps 1-5, 7-10
+    // Steps 6.b-6.e: +0 != -0
+    // Added the nonzero y check to make Flow happy, but it is redundant
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    // Step 6.a: NaN == NaN
+    return x !== x && y !== y;
+  }
+}
+
+/**
+ * Performs equality by iterating through keys on an object and returning false
+ * when any key has values which are not strictly equal between the arguments.
+ * Returns true when the values of all keys are strictly equal.
+ */
+function shallowEqual(objA, objB) {
+  if (is(objA, objB)) {
+    return true;
+  }
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+
+  // Test for A's keys different from B.
+  for (var i = 0; i < keysA.length; i++) {
+    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+module.exports = shallowEqual;
+},{}],"../node_modules/react-addons-shallow-compare/index.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @providesModule shallowCompare
+ */
+
+'use strict';
+
+var shallowEqual = require('fbjs/lib/shallowEqual');
+
+/**
+ * Does a shallow comparison for props and state.
+ * See ReactComponentWithPureRenderMixin
+ * See also https://facebook.github.io/react/docs/shallow-compare.html
+ */
+function shallowCompare(instance, nextProps, nextState) {
+  return (
+    !shallowEqual(instance.props, nextProps) ||
+    !shallowEqual(instance.state, nextState)
+  );
+}
+
+module.exports = shallowCompare;
+
+},{"fbjs/lib/shallowEqual":"../node_modules/fbjs/lib/shallowEqual.js"}],"../node_modules/fela-bindings/es/generateDisplayName.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateDisplayName;
+
+function generateDisplayName(component) {
+  var displayName = component.displayName || component.name;
+
+  if (displayName) {
+    return 'Fela' + displayName;
+  }
+
+  return 'ConnectedFelaComponent';
+}
+},{}],"../node_modules/fela-bindings/es/generateSelectorPrefix.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateSelectorPrefix;
+
+var sanitizeComponentDisplayName = function sanitizeComponentDisplayName(cn) {
+  return cn.replace(/[^_a-z0-9-]/gi, '_').replace(/_{2,}/g, '_').replace(/(^_|_$)/g, '');
+};
+
+function generateSelectorPrefix(displayName, ruleName) {
+  var sanitizedDisplayName = sanitizeComponentDisplayName(displayName);
+  return ruleName ? sanitizedDisplayName + '_' + ruleName : sanitizedDisplayName;
+}
+},{}],"../node_modules/fela-bindings/es/hoistStatics.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = hoistStatics;
+
+var _arrayEach = _interopRequireDefault(require("fast-loops/lib/arrayEach"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+var basicStatics = {
+  name: true,
+  length: true,
+  prototype: true,
+  caller: true,
+  callee: true,
+  arguments: true,
+  arity: true
+};
+var mergableStatics = ['contextTypes', 'defaultProps'];
+var blockedStatics = {
+  childContextTypes: true,
+  propTypes: true,
+  getDerivedStateFromProps: true,
+  contextType: true
+};
+
+function hoistStatics(target, source) {
+  if (typeof source === 'string') {
+    return target;
+  }
+
+  var statics = Object.getOwnPropertyNames(source).filter(function (property) {
+    return !basicStatics[property];
+  });
+  (0, _arrayEach.default)(statics, function (property) {
+    if (!target.hasOwnProperty(property) && !blockedStatics[property]) {
+      try {
+        // Avoid failures from read-only properties
+        var descriptor = Object.getOwnPropertyDescriptor(source, property);
+
+        if (descriptor) {
+          Object.defineProperty(target, property, descriptor);
+        }
+      } catch (e) {// TODO: warning
+      }
+    }
+  });
+  (0, _arrayEach.default)(mergableStatics, function (property) {
+    if (source[property]) {
+      var targetStatics = target[property] || {};
+      target[property] = _extends({}, source[property], targetStatics);
+    }
+  });
+  return target;
+}
+},{"fast-loops/lib/arrayEach":"../node_modules/fast-loops/lib/arrayEach.js"}],"../node_modules/fela-bindings/es/connectFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = connectFactory;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _objectEach = _interopRequireDefault(require("fast-loops/lib/objectEach"));
+
+var _felaTools = require("fela-tools");
+
+var _reactAddonsShallowCompare = _interopRequireDefault(require("react-addons-shallow-compare"));
+
+var _generateDisplayName = _interopRequireDefault(require("./generateDisplayName"));
+
+var _generateSelectorPrefix = _interopRequireDefault(require("./generateSelectorPrefix"));
+
+var _hoistStatics = _interopRequireDefault(require("./hoistStatics"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var defaultConfig = {
+  pure: true
+};
+
+function connectFactory(BaseComponent, createElement, RendererContext, ThemeContext) {
+  return function connect(rules) {
+    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var connectConfig = _extends({}, defaultConfig, config);
+
+    return function (component) {
+      var EnhancedComponent = function (_BaseComponent) {
+        _inherits(EnhancedComponent, _BaseComponent);
+
+        function EnhancedComponent() {
+          _classCallCheck(this, EnhancedComponent);
+
+          return _possibleConstructorReturn(this, (EnhancedComponent.__proto__ || Object.getPrototypeOf(EnhancedComponent)).apply(this, arguments));
+        }
+
+        _createClass(EnhancedComponent, [{
+          key: 'shouldComponentUpdate',
+          value: function shouldComponentUpdate(nextProps, nextState) {
+            if (connectConfig.pure) {
+              return (0, _reactAddonsShallowCompare.default)(this, nextProps, nextState);
+            }
+
+            return true;
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            var _props = this.props,
+                extend = _props.extend,
+                _felaRules = _props._felaRules,
+                otherProps = _objectWithoutProperties(_props, ['extend', '_felaRules']);
+
+            var allRules = [rules];
+
+            if (_felaRules) {
+              allRules.push(_felaRules);
+            }
+
+            if (extend) {
+              allRules.push(extend);
+            }
+
+            var combinedRules = _felaTools.combineMultiRules.apply(undefined, allRules);
+
+            return createElement(RendererContext.Consumer, undefined, function (renderer) {
+              return createElement(ThemeContext.Consumer, undefined, function (theme) {
+                var preparedRules = combinedRules(_extends({}, otherProps, {
+                  theme: theme
+                }), renderer); // improve developer experience with monolithic renderer
+
+                if ("development" !== 'production' && renderer.prettySelectors) {
+                  var componentName = component.displayName || component.name || '';
+                  (0, _objectEach.default)(preparedRules, function (rule, name) {
+                    rule.selectorPrefix = (0, _generateSelectorPrefix.default)(componentName, name);
+                  });
+                }
+
+                if (component._isFelaComponent) {
+                  return createElement(component, _extends({
+                    _felaRules: combinedRules
+                  }, otherProps));
+                }
+
+                var styles = (0, _objectReduce.default)(preparedRules, function (styleMap, rule, name) {
+                  styleMap[name] = renderer.renderRule(rule, _extends({}, otherProps, {
+                    theme: theme
+                  }));
+                  return styleMap;
+                }, {});
+                var boundRules = (0, _objectReduce.default)(preparedRules, function (ruleMap, rule, name) {
+                  ruleMap[name] = function (props) {
+                    return rule(_extends({
+                      theme: theme
+                    }, props), renderer);
+                  };
+
+                  return ruleMap;
+                }, {});
+                return createElement(component, _extends({}, otherProps, {
+                  styles: styles,
+                  theme: theme,
+                  rules: boundRules
+                }));
+              });
+            });
+          }
+        }]);
+
+        return EnhancedComponent;
+      }(BaseComponent);
+
+      EnhancedComponent.displayName = (0, _generateDisplayName.default)(component);
+      EnhancedComponent._isFelaComponent = true;
+      return (0, _hoistStatics.default)(EnhancedComponent, component);
+    };
+  };
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","fast-loops/lib/objectEach":"../node_modules/fast-loops/lib/objectEach.js","fela-tools":"../node_modules/fela-tools/es/index.js","react-addons-shallow-compare":"../node_modules/react-addons-shallow-compare/index.js","./generateDisplayName":"../node_modules/fela-bindings/es/generateDisplayName.js","./generateSelectorPrefix":"../node_modules/fela-bindings/es/generateSelectorPrefix.js","./hoistStatics":"../node_modules/fela-bindings/es/hoistStatics.js"}],"../node_modules/fela-bindings/es/extractPassThroughProps.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = extractPassThroughProps;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function extractPassThroughProps(passThrough, ruleProps) {
+  return (0, _arrayReduce.default)(passThrough, function (output, property) {
+    if (ruleProps.hasOwnProperty(property)) {
+      output[property] = ruleProps[property];
+    }
+
+    return output;
+  }, {});
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js"}],"../node_modules/fela-bindings/es/extractUsedProps.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = extractUsedProps;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+function extractUsedProps(rule) {
+  var theme = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var usedProps = []; // if the browser doesn't support proxies
+  // we simply return an empty props object
+  // see https://github.com/robinweser/fela/issues/468
+
+  if (typeof Proxy === 'undefined') {
+    return usedProps;
+  }
+
+  var handler = function handler(props) {
+    return {
+      get: function get(target, key) {
+        if (_typeof(target[key]) === 'object' && target[key] !== null) {
+          props.push(key);
+          return target[key];
+        }
+
+        props.push(key);
+        return target[key];
+      }
+    };
+  };
+
+  var proxy = new Proxy({
+    theme: theme
+  }, handler(usedProps));
+
+  try {
+    rule(proxy);
+    return usedProps;
+  } catch (err) {
+    return [];
+  }
+}
+},{}],"../node_modules/fela-bindings/es/resolvePassThrough.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = resolvePassThrough;
+
+function resolvePassThrough(passThrough, ruleProps) {
+  if (typeof passThrough === 'function') {
+    return passThrough(ruleProps);
+  }
+
+  return passThrough;
+}
+},{}],"../node_modules/fela-bindings/es/resolveUsedProps.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = resolveUsedProps;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function resolveUsedProps(props, src) {
+  return (0, _objectReduce.default)(src, function (output, value, prop) {
+    if (props.indexOf(prop) === -1 && prop !== 'innerRef' && prop !== 'is') {
+      output.push(prop);
+    }
+
+    return output;
+  }, []);
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js"}],"../node_modules/fela-bindings/es/createComponentFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createComponentFactory;
+
+var _fela = require("fela");
+
+var _hoistStatics = _interopRequireDefault(require("./hoistStatics"));
+
+var _extractPassThroughProps = _interopRequireDefault(require("./extractPassThroughProps"));
+
+var _extractUsedProps = _interopRequireDefault(require("./extractUsedProps"));
+
+var _generateSelectorPrefix = _interopRequireDefault(require("./generateSelectorPrefix"));
+
+var _resolvePassThrough = _interopRequireDefault(require("./resolvePassThrough"));
+
+var _resolveUsedProps = _interopRequireDefault(require("./resolveUsedProps"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+}
+
+function createComponentFactory(createElement, RendererContext, FelaTheme) {
+  var withProxy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var alwaysPassThroughProps = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : [];
+  return function createComponent(rule) {
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'div';
+    var passThroughProps = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+    var displayName = rule.name ? rule.name : 'FelaComponent';
+
+    var FelaComponent = function FelaComponent(_ref) {
+      var children = _ref.children,
+          _felaRule = _ref._felaRule,
+          extend = _ref.extend,
+          innerRef = _ref.innerRef,
+          id = _ref.id,
+          style = _ref.style,
+          as = _ref.as,
+          className = _ref.className,
+          _ref$passThrough = _ref.passThrough,
+          passThrough = _ref$passThrough === undefined ? [] : _ref$passThrough,
+          otherProps = _objectWithoutProperties(_ref, ['children', '_felaRule', 'extend', 'innerRef', 'id', 'style', 'as', 'className', 'passThrough']);
+
+      var renderFn = function renderFn(renderer) {
+        return createElement(FelaTheme, undefined, function (_felaTheme) {
+          if (!renderer) {
+            throw new Error("createComponent() can't render styles without the renderer in the context. Missing react-fela's <Provider /> at the app root?");
+          }
+
+          var usedProps = withProxy ? (0, _extractUsedProps.default)(rule, _felaTheme) : [];
+          var rules = [rule];
+
+          if (_felaRule) {
+            rules.push(_felaRule);
+          }
+
+          if (extend) {
+            if (typeof extend === 'function') {
+              rules.push(extend);
+            } else {
+              rules.push(function () {
+                return extend;
+              });
+            }
+          }
+
+          var combinedRule = _fela.combineRules.apply(undefined, rules); // improve developer experience with monolithic renderer
+
+
+          if ("development" !== 'production' && renderer.prettySelectors) {
+            var componentName = typeof type === 'string' ? displayName : type.displayName || type.name || '';
+            combinedRule.selectorPrefix = (0, _generateSelectorPrefix.default)(componentName);
+          } // compose passThrough props from arrays or functions
+
+
+          var resolvedPassThrough = [].concat(_toConsumableArray(alwaysPassThroughProps), _toConsumableArray((0, _resolvePassThrough.default)(passThroughProps, otherProps)), _toConsumableArray((0, _resolvePassThrough.default)(passThrough, otherProps)), _toConsumableArray(withProxy ? (0, _resolveUsedProps.default)(usedProps, otherProps) : []));
+
+          var ruleProps = _extends({}, otherProps, {
+            theme: _felaTheme,
+            as: as,
+            id: id // if the component renders into another Fela component
+            // we pass down the combinedRule as well as both
+
+          });
+
+          if (type._isFelaComponent) {
+            return createElement(type, _extends({
+              _felaRule: combinedRule,
+              passThrough: resolvedPassThrough,
+              innerRef: innerRef,
+              style: style,
+              className: className,
+              as: as,
+              id: id
+            }, otherProps), children);
+          }
+
+          var componentProps = (0, _extractPassThroughProps.default)(resolvedPassThrough, otherProps); // fela-native support
+
+          if (renderer.isNativeRenderer) {
+            var felaStyle = renderer.renderRule(combinedRule, ruleProps);
+            componentProps.style = style ? [style, felaStyle] : felaStyle;
+          } else {
+            if (style) {
+              componentProps.style = style;
+            }
+
+            var cls = className ? className + ' ' : '';
+            componentProps.className = cls + renderer.renderRule(combinedRule, ruleProps);
+          }
+
+          if (id) {
+            componentProps.id = id;
+          }
+
+          if (innerRef) {
+            componentProps.ref = innerRef;
+          }
+
+          var customType = as || type;
+          return createElement(customType, componentProps, children);
+        });
+      };
+
+      return createElement(RendererContext.Consumer, undefined, renderFn);
+    }; // use the rule name as display name to better debug with react inspector
+
+
+    FelaComponent.displayName = displayName;
+    FelaComponent._isFelaComponent = true;
+    return (0, _hoistStatics.default)(FelaComponent, type);
+  };
+}
+},{"fela":"../node_modules/fela/es/index.js","./hoistStatics":"../node_modules/fela-bindings/es/hoistStatics.js","./extractPassThroughProps":"../node_modules/fela-bindings/es/extractPassThroughProps.js","./extractUsedProps":"../node_modules/fela-bindings/es/extractUsedProps.js","./generateSelectorPrefix":"../node_modules/fela-bindings/es/generateSelectorPrefix.js","./resolvePassThrough":"../node_modules/fela-bindings/es/resolvePassThrough.js","./resolveUsedProps":"../node_modules/fela-bindings/es/resolveUsedProps.js"}],"../node_modules/fela-bindings/es/FelaComponentFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = FelaComponentFactory;
+
+var _fela = require("fela");
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+}
+
+function FelaComponentFactory(createElement, RendererContext, FelaTheme) {
+  function FelaComponent(_ref) {
+    var children = _ref.children,
+        _ref$as = _ref.as,
+        as = _ref$as === undefined ? 'div' : _ref$as,
+        style = _ref.style,
+        otherProps = _objectWithoutProperties(_ref, ['children', 'as', 'style']);
+
+    var renderFn = function renderFn(renderer) {
+      if (renderer.devMode && style == null) {
+        // eslint-disable-next-line no-console
+        console.warn('"FelaComponent" is being rendered without a style prop\nIf all you need is access to theme, try using "FelaTheme" or the "useFela" hook instead');
+      }
+
+      return createElement(FelaTheme, undefined, function (theme) {
+        // TODO: could optimize perf by not calling combineRules if not necessary
+        var renderedRule = renderer.renderRule((0, _fela.combineRules)(style), _extends({}, otherProps, {
+          theme: theme
+        }));
+
+        if (children instanceof Function) {
+          return children({
+            className: !renderer.isNativeRenderer && renderedRule,
+            style: renderer.isNativeRenderer && renderedRule,
+            theme: theme,
+            as: as
+          });
+        }
+
+        return createElement(as, {
+          className: !renderer.isNativeRenderer && renderedRule,
+          style: renderer.isNativeRenderer && renderedRule
+        }, children);
+      });
+    };
+
+    return createElement(RendererContext.Consumer, undefined, renderFn);
+  }
+
+  return FelaComponent;
+}
+},{"fela":"../node_modules/fela/es/index.js"}],"../node_modules/fela-bindings/es/FelaThemeFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = FelaThemeFactory;
+
+function FelaThemeFactory(createElement, ThemeContext) {
+  function FelaTheme(_ref) {
+    var children = _ref.children;
+    var renderFn = children;
+    return createElement(ThemeContext.Consumer, undefined, renderFn);
+  }
+
+  return FelaTheme;
+}
+},{}],"../node_modules/fela-dom/es/dom/connection/queryNode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = queryNode;
+
+function queryNode(_ref) {
+  var type = _ref.type,
+      media = _ref.media,
+      support = _ref.support;
+  var targetDocument = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+  var mediaQuery = media ? '[media="' + media + '"]' : ':not([media])';
+  var supportQuery = support ? '[data-fela-support="true"]' : ':not([data-fela-support="true"])';
+  return targetDocument.querySelector('[data-fela-type="' + type + '"]' + supportQuery + mediaQuery);
+}
+},{}],"../node_modules/fela-dom/es/dom/connection/getNodeSibling.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getNodeSibling;
+
+var _felaUtils = require("fela-utils");
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function getNodeSibling(nodes, _ref, sortMediaQuery) {
+  var type = _ref.type,
+      media = _ref.media,
+      support = _ref.support;
+
+  switch (type) {
+    case _felaUtils.FONT_TYPE:
+    case _felaUtils.STATIC_TYPE:
+    case _felaUtils.KEYFRAME_TYPE:
+      return nodes[0];
+
+    case _felaUtils.RULE_TYPE:
+      var mediaNodes = nodes.map(function (node) {
+        return node.media;
+      });
+      var filteredNodes = mediaNodes.filter(function (m) {
+        return m.length !== 0;
+      });
+
+      if (media) {
+        var sorted = [].concat(_toConsumableArray(filteredNodes), [media]).sort(sortMediaQuery);
+        var index = sorted.indexOf(media) + 1;
+        var insertMedia = sorted[index];
+
+        if (insertMedia) {
+          if (insertMedia === media && support) {
+            // support
+            return nodes.find(function (el) {
+              return el.media === sorted[sorted.indexOf(media) + 2];
+            });
+          }
+
+          return nodes.find(function (el) {
+            return el.media === insertMedia;
+          });
+        }
+      } else {
+        var _sorted = filteredNodes.sort(sortMediaQuery);
+
+        var _insertMedia = _sorted[0];
+
+        if (!support) {
+          // if we insert the plain RULE node while there's already a support RULE node
+          // make sure to insert before
+          var supportNode = nodes.find(function (el) {
+            return el.getAttribute('data-fela-support') !== undefined && el.media === '' && el.getAttribute('data-fela-type') === 'RULE';
+          });
+
+          if (supportNode) {
+            return supportNode;
+          }
+        }
+
+        if (_insertMedia) {
+          return nodes.find(function (el) {
+            return el.media === _insertMedia;
+          });
+        }
+      }
+
+  }
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js"}],"../node_modules/fela-dom/es/dom/connection/createNode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createNode;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _getNodeSibling = _interopRequireDefault(require("./getNodeSibling"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function createNode(attributes) {
+  var targetDocument = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+  var sortMediaQuery = arguments[2];
+  var styleNodeAttributes = arguments[3];
+  var head = targetDocument.head || {};
+  var type = attributes.type,
+      media = attributes.media,
+      support = attributes.support;
+  var node = targetDocument.createElement('style');
+  node.setAttribute('data-fela-type', type);
+  node.type = 'text/css';
+
+  if (support) {
+    node.setAttribute('data-fela-support', 'true');
+  }
+
+  if (media) {
+    node.media = media;
+  } // applying custom style tag attributes
+
+
+  for (var attribute in styleNodeAttributes) {
+    node.setAttribute(attribute, styleNodeAttributes[attribute]);
+  } // also apply attributes set globally with window.FelaConfig
+
+
+  if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) !== undefined && window.FelaConfig) {
+    for (var _attribute in window.FelaConfig.styleNodeAttributes) {
+      node.setAttribute(_attribute, window.FelaConfig.styleNodeAttributes[_attribute]);
+    }
+  }
+
+  var nodes = head.querySelectorAll('[data-fela-type]');
+  var sibling = (0, _getNodeSibling.default)([].concat(_toConsumableArray(nodes)), attributes, sortMediaQuery);
+
+  if (sibling) {
+    head.insertBefore(node, sibling);
+  } else {
+    head.appendChild(node);
+  }
+
+  return node;
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","./getNodeSibling":"../node_modules/fela-dom/es/dom/connection/getNodeSibling.js"}],"../node_modules/fela-dom/es/dom/connection/getNodeFromCache.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getNodeFromCache;
+
+var _queryNode = _interopRequireDefault(require("./queryNode"));
+
+var _createNode = _interopRequireDefault(require("./createNode"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getReference(_ref) {
+  var type = _ref.type,
+      _ref$media = _ref.media,
+      media = _ref$media === undefined ? '' : _ref$media,
+      _ref$support = _ref.support,
+      support = _ref$support === undefined ? '' : _ref$support;
+  return type + media + support;
+}
+
+function getNodeFromCache(attributes, renderer) {
+  var targetDocument = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : document;
+  var reference = getReference(attributes);
+
+  if (!renderer.nodes[reference]) {
+    var node = (0, _queryNode.default)(attributes, targetDocument) || (0, _createNode.default)(attributes, targetDocument, renderer.sortMediaQuery, renderer.styleNodeAttributes);
+    renderer.nodes[reference] = node;
+  }
+
+  return renderer.nodes[reference];
+}
+},{"./queryNode":"../node_modules/fela-dom/es/dom/connection/queryNode.js","./createNode":"../node_modules/fela-dom/es/dom/connection/createNode.js"}],"../node_modules/fela-dom/es/server/getRehydrationIndex.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getRehydrationIndex;
+var SELECTOR_PREFIX_REGEXP = /^[a-z0-9_-]*$/gi;
+
+function getRehydrationIndex(renderer) {
+  if (renderer.selectorPrefix.length === 0 || renderer.selectorPrefix.match(SELECTOR_PREFIX_REGEXP) !== null) {
+    return renderer.uniqueRuleIdentifier;
+  }
+
+  return -1;
+}
+},{}],"../node_modules/fela-dom/es/server/renderToSheetList.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = renderToSheetList;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _felaUtils = require("fela-utils");
+
+var _getRehydrationIndex = _interopRequireDefault(require("./getRehydrationIndex"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function renderToSheetList(renderer) {
+  var cacheCluster = (0, _felaUtils.clusterCache)(renderer.cache, renderer.ruleOrder);
+  var rehydrationIndex = (0, _getRehydrationIndex.default)(renderer);
+  var sheetList = (0, _objectReduce.default)(_felaUtils.sheetMap, function (list, type, key) {
+    if (cacheCluster[key].length > 0) {
+      list.push({
+        css: cacheCluster[key],
+        rehydration: rehydrationIndex,
+        attributes: renderer.styleNodeAttributes,
+        type: type
+      });
+    }
+
+    return list;
+  }, []);
+  var support = (0, _felaUtils.cssifySupportRules)(cacheCluster.supportRules);
+
+  if (support) {
+    sheetList.push({
+      css: support,
+      type: _felaUtils.RULE_TYPE,
+      rehydration: rehydrationIndex,
+      attributes: renderer.styleNodeAttributes,
+      support: true
+    });
+  }
+
+  var mediaKeys = Object.keys(_extends({}, cacheCluster.supportMediaRules, cacheCluster.mediaRules)).sort(renderer.sortMediaQuery);
+  return (0, _arrayReduce.default)(mediaKeys, function (list, media) {
+    // basic media query rules
+    if (cacheCluster.mediaRules[media] && cacheCluster.mediaRules[media].length > 0) {
+      list.push({
+        css: cacheCluster.mediaRules[media],
+        type: _felaUtils.RULE_TYPE,
+        rehydration: rehydrationIndex,
+        attributes: renderer.styleNodeAttributes,
+        media: media
+      });
+    } // support media rules
+
+
+    if (cacheCluster.supportMediaRules[media]) {
+      var mediaSupport = (0, _felaUtils.cssifySupportRules)(cacheCluster.supportMediaRules[media]);
+
+      if (mediaSupport.length > 0) {
+        list.push({
+          css: mediaSupport,
+          type: _felaUtils.RULE_TYPE,
+          rehydration: rehydrationIndex,
+          attributes: renderer.styleNodeAttributes,
+          support: true,
+          media: media
+        });
+      }
+    }
+
+    return list;
+  }, sheetList);
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","fela-utils":"../node_modules/fela-utils/es/index.js","./getRehydrationIndex":"../node_modules/fela-dom/es/server/getRehydrationIndex.js"}],"../node_modules/fela-dom/es/dom/connection/insertRuleInDevMode.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = updateNodeInDevMode;
+
+var _felaUtils = require("fela-utils");
+
+var _renderToSheetList = _interopRequireDefault(require("../../server/renderToSheetList"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// This method is quite hacky and in-performant, but yet
+// the most simple way to respect rule sorting even in devMode
+function updateNodeInDevMode(renderer, node) {
+  var sheetList = (0, _renderToSheetList.default)(renderer);
+  var media = node.getAttribute('media') || undefined;
+  var support = node.getAttribute('data-fela-support') ? true : undefined;
+  var currentSheet = sheetList.find(function (sheet) {
+    return sheet.type === _felaUtils.RULE_TYPE && sheet.media === media && sheet.support === support;
+  });
+
+  if (currentSheet) {
+    node.textContent = currentSheet.css;
+  }
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js","../../server/renderToSheetList":"../node_modules/fela-dom/es/server/renderToSheetList.js"}],"../node_modules/fela-dom/es/dom/connection/insertRule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = insertRule;
+
+var _felaUtils = require("fela-utils");
+
+var _insertRuleInDevMode = _interopRequireDefault(require("./insertRuleInDevMode"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function insertRule(_ref, renderer, node) {
+  var selector = _ref.selector,
+      declaration = _ref.declaration,
+      support = _ref.support,
+      media = _ref.media,
+      pseudo = _ref.pseudo;
+  var nodeReference = media + support; // only use insertRule in production as browser devtools might have
+  // weird behavior if used together with insertRule at runtime
+
+  if (renderer.devMode) {
+    (0, _insertRuleInDevMode.default)(renderer, node);
+    return;
+  }
+
+  try {
+    var score = (0, _felaUtils.getRuleScore)(renderer.ruleOrder, pseudo);
+    var cssRules = node.sheet.cssRules;
+    var index = cssRules.length; // This heavily optimises the amount of rule iterations we need
+    // due to most rules having a score=0 anyways
+
+    if (score === 0) {
+      if (renderer.scoreIndex[nodeReference] === undefined) {
+        index = 0;
+      } else {
+        index = renderer.scoreIndex[nodeReference] + 1;
+      }
+    } else {
+      // we start iterating from the last score=0 entry
+      // to correctly inject pseudo classes etc.
+      var startIndex = renderer.scoreIndex[nodeReference] || 0;
+
+      for (var i = startIndex, len = cssRules.length; i < len; ++i) {
+        if (cssRules[i].score > score) {
+          index = i;
+          break;
+        }
+      }
+    }
+
+    var cssRule = (0, _felaUtils.generateCSSRule)(selector, declaration);
+
+    if (support.length > 0) {
+      var cssSupportRule = (0, _felaUtils.generateCSSSupportRule)(support, cssRule);
+      node.sheet.insertRule(cssSupportRule, index);
+    } else {
+      node.sheet.insertRule(cssRule, index);
+    }
+
+    if (score === 0) {
+      renderer.scoreIndex[nodeReference] = index;
+    }
+
+    cssRules[index].score = score;
+  } catch (e) {// We're disabled these warnings due to false-positive errors with browser prefixes
+    // See https://github.com/robinweser/fela/issues/634
+    // console.warn(
+    //   `An error occurred while inserting the rules into DOM.\n`,
+    //   declaration.replace(/;/g, ';\n'),
+    //   e
+    // )
+  }
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js","./insertRuleInDevMode":"../node_modules/fela-dom/es/dom/connection/insertRuleInDevMode.js"}],"../node_modules/fela-dom/es/dom/connection/createSubscription.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createSubscription;
+
+var _objectEach = _interopRequireDefault(require("fast-loops/lib/objectEach"));
+
+var _felaUtils = require("fela-utils");
+
+var _getNodeFromCache = _interopRequireDefault(require("./getNodeFromCache"));
+
+var _insertRule = _interopRequireDefault(require("./insertRule"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable consistent-return */
+function createSubscription(renderer) {
+  var targetDocument = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+  return function (change) {
+    if (change.type === _felaUtils.CLEAR_TYPE) {
+      (0, _objectEach.default)(renderer.nodes, function (node) {
+        return node.parentNode.removeChild(node);
+      });
+      renderer.nodes = {};
+      renderer.scoreIndex = {};
+      return;
+    }
+
+    var node = (0, _getNodeFromCache.default)(change, renderer, targetDocument);
+
+    switch (change.type) {
+      case _felaUtils.KEYFRAME_TYPE:
+        if (node.textContent.indexOf(change.keyframe) === -1) {
+          node.textContent += change.keyframe;
+        }
+
+        break;
+
+      case _felaUtils.FONT_TYPE:
+        if (node.textContent.indexOf(change.fontFace) === -1) {
+          node.textContent += change.fontFace;
+        }
+
+        break;
+
+      case _felaUtils.STATIC_TYPE:
+        var css = change.selector ? (0, _felaUtils.generateCSSRule)(change.selector, change.css) : change.css;
+
+        if (node.textContent.indexOf(css) === -1) {
+          node.textContent += css;
+        }
+
+        break;
+
+      case _felaUtils.RULE_TYPE:
+        (0, _insertRule.default)(change, renderer, node);
+        break;
+
+      default:
+        // TODO: warning
+        break;
+    }
+  };
+}
+},{"fast-loops/lib/objectEach":"../node_modules/fast-loops/lib/objectEach.js","fela-utils":"../node_modules/fela-utils/es/index.js","./getNodeFromCache":"../node_modules/fela-dom/es/dom/connection/getNodeFromCache.js","./insertRule":"../node_modules/fela-dom/es/dom/connection/insertRule.js"}],"../node_modules/fela-dom/es/dom/render.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = render;
+
+var _objectEach = _interopRequireDefault(require("fast-loops/lib/objectEach"));
+
+var _createSubscription = _interopRequireDefault(require("./connection/createSubscription"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function render(renderer, targetDocument) {
+  if (!renderer.updateSubscription) {
+    renderer.scoreIndex = {};
+    renderer.nodes = {};
+    renderer.updateSubscription = (0, _createSubscription.default)(renderer, targetDocument);
+    renderer.subscribe(renderer.updateSubscription); // simulate rendering to ensure all styles rendered prior to
+    // calling FelaDOM.render are correctly injected as well
+
+    (0, _objectEach.default)(renderer.cache, renderer._emitChange);
+  }
+}
+},{"fast-loops/lib/objectEach":"../node_modules/fast-loops/lib/objectEach.js","./connection/createSubscription":"../node_modules/fela-dom/es/dom/connection/createSubscription.js"}],"../node_modules/fela-dom/es/dom/rehydration/extractSupportQuery.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = extractSupportQuery;
+
+function extractSupportQuery(ruleSet) {
+  return ruleSet.split('{')[0].slice(9).trim();
+}
+},{}],"../node_modules/fela-dom/es/dom/rehydration/generateCacheEntry.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = generateCacheEntry;
+
+var _felaUtils = require("fela-utils");
+
+function generateCacheEntry(type, className, property, value) {
+  var pseudo = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '';
+  var media = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : '';
+  var support = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : '';
+  return {
+    type: type,
+    className: className,
+    selector: (0, _felaUtils.generateCSSSelector)(className, pseudo),
+    declaration: property + ':' + value,
+    pseudo: pseudo,
+    media: media,
+    support: support
+  };
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js"}],"../node_modules/fela-dom/es/dom/rehydration/rehydrateRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rehydrateRules;
+
+var _felaUtils = require("fela-utils");
+
+var _generateCacheEntry = _interopRequireDefault(require("./generateCacheEntry"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+var DECL_REGEX = /[.]([0-9a-z_-]+)([^{]+)?{([^:]+):([^}]+)}/gi;
+
+function rehydrateRules(css) {
+  var media = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var support = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var cache = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  var decl = void 0; // This excellent parsing implementation was originally taken from Styletron and modified to fit Fela
+  // https://github.com/rtsao/styletron/blob/master/packages/styletron-client/src/index.js#L47
+
+  /* eslint-disable no-unused-vars,no-cond-assign */
+
+  while (decl = DECL_REGEX.exec(css)) {
+    // $FlowFixMe
+    var _decl = decl,
+        _decl2 = _slicedToArray(_decl, 5),
+        ruleSet = _decl2[0],
+        className = _decl2[1],
+        pseudo = _decl2[2],
+        property = _decl2[3],
+        value = _decl2[4];
+    /* eslint-enable */
+
+
+    var declarationReference = (0, _felaUtils.generateDeclarationReference)(property, value, pseudo, media, support);
+    cache[declarationReference] = (0, _generateCacheEntry.default)(_felaUtils.RULE_TYPE, className, property, value, pseudo, media, support);
+  }
+
+  return cache;
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js","./generateCacheEntry":"../node_modules/fela-dom/es/dom/rehydration/generateCacheEntry.js"}],"../node_modules/fela-dom/es/dom/rehydration/rehydrateSupportRules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rehydrateSupportRules;
+
+var _extractSupportQuery = _interopRequireDefault(require("./extractSupportQuery"));
+
+var _rehydrateRules = _interopRequireDefault(require("./rehydrateRules"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+var SUPPORT_REGEX = /@supports[^{]+\{([\s\S]+?})\s*}/gi;
+
+function rehydrateSupportRules(css) {
+  var media = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var cache = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var decl = void 0; // eslint-disable-next-line no-cond-assign
+
+  while (decl = SUPPORT_REGEX.exec(css)) {
+    var _decl = decl,
+        _decl2 = _slicedToArray(_decl, 2),
+        ruleSet = _decl2[0],
+        cssRules = _decl2[1];
+
+    var supportQuery = (0, _extractSupportQuery.default)(ruleSet);
+    (0, _rehydrateRules.default)(cssRules, media, supportQuery, cache);
+  }
+
+  return cache;
+}
+},{"./extractSupportQuery":"../node_modules/fela-dom/es/dom/rehydration/extractSupportQuery.js","./rehydrateRules":"../node_modules/fela-dom/es/dom/rehydration/rehydrateRules.js"}],"../node_modules/fela-dom/es/dom/rehydration/rehydrateKeyframes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rehydrateKeyframes;
+
+var _felaUtils = require("fela-utils");
+
+var _slicedToArray = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+var RE = /@(-webkit-|-moz-)?keyframes ([a-z_][a-z0-9-_]*)(\{.*?(?=}})}})/gi;
+
+function rehydrateKeyframes(css) {
+  var cache = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var decl = void 0;
+
+  while (decl = RE.exec(css)) {
+    var _decl = decl,
+        _decl2 = _slicedToArray(_decl, 4),
+        keyframe = _decl2[0],
+        prefix = _decl2[1],
+        animationName = _decl2[2],
+        reference = _decl2[3];
+
+    if (!cache[reference]) {
+      cache[reference] = {
+        type: _felaUtils.KEYFRAME_TYPE,
+        keyframe: keyframe,
+        name: animationName
+      };
+    } else {
+      cache[reference].keyframe += keyframe;
+    }
+  }
+
+  return cache;
+}
+},{"fela-utils":"../node_modules/fela-utils/es/index.js"}],"../node_modules/fela-dom/es/dom/rehydrate.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = rehydrate;
+
+var _arrayEach = _interopRequireDefault(require("fast-loops/lib/arrayEach"));
+
+var _felaUtils = require("fela-utils");
+
+var _rehydrateSupportRules = _interopRequireDefault(require("./rehydration/rehydrateSupportRules"));
+
+var _rehydrateRules = _interopRequireDefault(require("./rehydration/rehydrateRules"));
+
+var _render = _interopRequireDefault(require("./render"));
+
+var _rehydrateKeyframes = _interopRequireDefault(require("./rehydration/rehydrateKeyframes"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CLASSNAME_REGEX = /[.][a-z0-9_-]*/gi; // TODO: static, font
+
+function rehydrate(renderer) {
+  var targetDocument = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+  (0, _render.default)(renderer, targetDocument);
+  (0, _arrayEach.default)(targetDocument.querySelectorAll('[data-fela-type]'), function (node) {
+    var rehydrationAttribute = node.getAttribute('data-fela-rehydration') || -1;
+    var rehydrationIndex = renderer.uniqueRuleIdentifier || parseInt(rehydrationAttribute, 10); // skip rehydration if no rehydration index is set
+    // this index is set to -1 if something blocks rehydration
+
+    if (rehydrationIndex !== -1) {
+      var type = node.getAttribute('data-fela-type') || '';
+      var media = node.getAttribute('media') || '';
+      var support = node.getAttribute('data-fela-support') || '';
+      var css = node.textContent;
+      renderer.uniqueRuleIdentifier = rehydrationIndex;
+      var reference = type + media + support;
+      renderer.nodes[reference] = node;
+
+      if (type === _felaUtils.RULE_TYPE) {
+        if (support) {
+          (0, _rehydrateSupportRules.default)(css, media, renderer.cache);
+        } else {
+          (0, _rehydrateRules.default)(css, media, '', renderer.cache);
+        } // On Safari, style sheets with IE-specific media queries
+        // can yield null for node.sheet
+        // https://github.com/robinweser/fela/issues/431#issuecomment-423239591
+
+
+        if (node.sheet && node.sheet.cssRules) {
+          var nodeReference = media + support;
+          (0, _arrayEach.default)(node.sheet.cssRules, function (rule, index) {
+            var selectorText = rule.conditionText ? rule.cssRules[0].selectorText : rule.selectorText;
+            var score = (0, _felaUtils.getRuleScore)(renderer.ruleOrder, selectorText.split(CLASSNAME_REGEX)[1]);
+
+            if (score === 0) {
+              renderer.scoreIndex[nodeReference] = index;
+            }
+
+            rule.score = score;
+          });
+        }
+      } else if (type === _felaUtils.KEYFRAME_TYPE) {
+        (0, _rehydrateKeyframes.default)(css, renderer.cache);
+      }
+    }
+  });
+}
+},{"fast-loops/lib/arrayEach":"../node_modules/fast-loops/lib/arrayEach.js","fela-utils":"../node_modules/fela-utils/es/index.js","./rehydration/rehydrateSupportRules":"../node_modules/fela-dom/es/dom/rehydration/rehydrateSupportRules.js","./rehydration/rehydrateRules":"../node_modules/fela-dom/es/dom/rehydration/rehydrateRules.js","./render":"../node_modules/fela-dom/es/dom/render.js","./rehydration/rehydrateKeyframes":"../node_modules/fela-dom/es/dom/rehydration/rehydrateKeyframes.js"}],"../node_modules/fela-dom/es/server/createStyleTagMarkup.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createStyleTagMarkup;
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function createStyleTagMarkup(css, type) {
+  var media = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var rehydrationIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : -1;
+  var support = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var styleNodeAttributes = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
+  var mediaAttribute = media.length > 0 ? ' media="' + media + '"' : '';
+  var supportAttribute = support ? ' data-fela-support="true"' : '';
+  var userAttributes = (0, _objectReduce.default)(styleNodeAttributes, function (attributes, value, attribute) {
+    return attributes + ' ' + attribute + '="' + value + '"';
+  }, '');
+  return '<style type="text/css" data-fela-rehydration="' + rehydrationIndex + '" data-fela-type="' + type + '"' + supportAttribute + mediaAttribute + userAttributes + '>' + css + '</style>';
+}
+},{"fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js"}],"../node_modules/fela-dom/es/server/renderToMarkup.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = renderToMarkup;
+
+var _arrayReduce = _interopRequireDefault(require("fast-loops/lib/arrayReduce"));
+
+var _objectReduce = _interopRequireDefault(require("fast-loops/lib/objectReduce"));
+
+var _felaUtils = require("fela-utils");
+
+var _createStyleTagMarkup = _interopRequireDefault(require("./createStyleTagMarkup"));
+
+var _getRehydrationIndex = _interopRequireDefault(require("./getRehydrationIndex"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function renderToMarkup(renderer) {
+  var cacheCluster = (0, _felaUtils.clusterCache)(renderer.cache, renderer.ruleOrder);
+  var rehydrationIndex = (0, _getRehydrationIndex.default)(renderer);
+  var styleMarkup = (0, _objectReduce.default)(_felaUtils.sheetMap, function (markup, type, key) {
+    if (cacheCluster[key].length > 0) {
+      markup += (0, _createStyleTagMarkup.default)(cacheCluster[key], type, '', rehydrationIndex, false, renderer.styleNodeAttributes);
+    }
+
+    return markup;
+  }, '');
+  var support = (0, _felaUtils.cssifySupportRules)(cacheCluster.supportRules);
+
+  if (support) {
+    styleMarkup += (0, _createStyleTagMarkup.default)(support, _felaUtils.RULE_TYPE, '', rehydrationIndex, true, renderer.styleNodeAttributes);
+  }
+
+  var mediaKeys = Object.keys(_extends({}, cacheCluster.supportMediaRules, cacheCluster.mediaRules)).sort(renderer.sortMediaQuery);
+  return (0, _arrayReduce.default)(mediaKeys, function (markup, media) {
+    // basic media query rules
+    if (cacheCluster.mediaRules[media] && cacheCluster.mediaRules[media].length > 0) {
+      markup += (0, _createStyleTagMarkup.default)(cacheCluster.mediaRules[media], _felaUtils.RULE_TYPE, media, rehydrationIndex, false, renderer.styleNodeAttributes);
+    } // support media rules
+
+
+    if (cacheCluster.supportMediaRules[media]) {
+      var mediaSupport = (0, _felaUtils.cssifySupportRules)(cacheCluster.supportMediaRules[media]);
+
+      if (mediaSupport.length > 0) {
+        markup += (0, _createStyleTagMarkup.default)(mediaSupport, _felaUtils.RULE_TYPE, media, rehydrationIndex, true, renderer.styleNodeAttributes);
+      }
+    }
+
+    return markup;
+  }, styleMarkup);
+}
+},{"fast-loops/lib/arrayReduce":"../node_modules/fast-loops/lib/arrayReduce.js","fast-loops/lib/objectReduce":"../node_modules/fast-loops/lib/objectReduce.js","fela-utils":"../node_modules/fela-utils/es/index.js","./createStyleTagMarkup":"../node_modules/fela-dom/es/server/createStyleTagMarkup.js","./getRehydrationIndex":"../node_modules/fela-dom/es/server/getRehydrationIndex.js"}],"../node_modules/fela-dom/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "render", {
+  enumerable: true,
+  get: function () {
+    return _render.default;
+  }
+});
+Object.defineProperty(exports, "rehydrate", {
+  enumerable: true,
+  get: function () {
+    return _rehydrate.default;
+  }
+});
+Object.defineProperty(exports, "renderToMarkup", {
+  enumerable: true,
+  get: function () {
+    return _renderToMarkup.default;
+  }
+});
+Object.defineProperty(exports, "renderToSheetList", {
+  enumerable: true,
+  get: function () {
+    return _renderToSheetList.default;
+  }
+});
+
+var _render = _interopRequireDefault(require("./dom/render"));
+
+var _rehydrate = _interopRequireDefault(require("./dom/rehydrate"));
+
+var _renderToMarkup = _interopRequireDefault(require("./server/renderToMarkup"));
+
+var _renderToSheetList = _interopRequireDefault(require("./server/renderToSheetList"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./dom/render":"../node_modules/fela-dom/es/dom/render.js","./dom/rehydrate":"../node_modules/fela-dom/es/dom/rehydrate.js","./server/renderToMarkup":"../node_modules/fela-dom/es/server/renderToMarkup.js","./server/renderToSheetList":"../node_modules/fela-dom/es/server/renderToSheetList.js"}],"../node_modules/fela-bindings/es/RendererProviderFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = RendererProviderFactory;
+
+var _felaDom = require("fela-dom");
+
+var _objectEach = _interopRequireDefault(require("fast-loops/lib/objectEach"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+function hasDOM(renderer, targetDocument) {
+  // ensure we're on a browser by using document since window is defined in e.g. React Native
+  // see https://github.com/robinweser/fela/issues/736
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
+  var doc = targetDocument || document;
+  return renderer && !renderer.isNativeRenderer && doc && doc.createElement;
+}
+
+function hasServerRenderedStyle() {
+  var targetDocument = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document;
+  return targetDocument.querySelectorAll('[data-fela-type]').length > 0;
+}
+
+function RendererProviderFactory(BaseComponent, RendererContext, createElement, renderChildren, statics) {
+  var RendererProvider = function (_BaseComponent) {
+    _inherits(RendererProvider, _BaseComponent);
+
+    function RendererProvider(props, context) {
+      _classCallCheck(this, RendererProvider);
+
+      var _this = _possibleConstructorReturn(this, (RendererProvider.__proto__ || Object.getPrototypeOf(RendererProvider)).call(this, props, context));
+
+      _this._renderStyle();
+
+      return _this;
+    }
+
+    _createClass(RendererProvider, [{
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate(prevProps) {
+        // TODO: we might add a shallow compare to avoid unnecessary rerenders
+        this._renderStyle();
+      }
+    }, {
+      key: '_renderStyle',
+      value: function _renderStyle() {
+        var _props = this.props,
+            renderer = _props.renderer,
+            shouldRehydrate = _props.rehydrate,
+            targetDocument = _props.targetDocument;
+
+        if (hasDOM(renderer, targetDocument)) {
+          if (shouldRehydrate && hasServerRenderedStyle(targetDocument)) {
+            (0, _felaDom.rehydrate)(renderer, targetDocument);
+          } else {
+            (0, _felaDom.render)(renderer, targetDocument);
+          }
+        }
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return createElement(RendererContext.Provider, {
+          value: this.props.renderer
+        }, renderChildren(this.props.children));
+      }
+    }]);
+
+    return RendererProvider;
+  }(BaseComponent);
+
+  if (statics) {
+    (0, _objectEach.default)(statics, function (value, key) {
+      RendererProvider[key] = value;
+    });
+  }
+
+  return RendererProvider;
+}
+},{"fela-dom":"../node_modules/fela-dom/es/index.js","fast-loops/lib/objectEach":"../node_modules/fast-loops/lib/objectEach.js"}],"../node_modules/fela-bindings/es/ThemeProviderFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ThemeProviderFactory;
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function ThemeProviderFactory(ThemeContext, createElement, renderChildren) {
+  return function ThemeProvider(_ref) {
+    var _ref$theme = _ref.theme,
+        theme = _ref$theme === undefined ? {} : _ref$theme,
+        _ref$overwrite = _ref.overwrite,
+        overwrite = _ref$overwrite === undefined ? false : _ref$overwrite,
+        children = _ref.children;
+    return createElement(ThemeContext.Consumer, null, function (previousTheme) {
+      return createElement(ThemeContext.Provider, {
+        value: !overwrite && previousTheme ? _extends({}, previousTheme, theme) : theme
+      }, renderChildren(children));
+    });
+  };
+}
+},{}],"../node_modules/fela-bindings/es/withThemeFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = withThemeFactory;
+
+var _hoistStatics = _interopRequireDefault(require("./hoistStatics"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function withThemeFactory(createElement, FelaTheme) {
+  return function withTheme(component) {
+    var propName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'theme';
+
+    var WithTheme = function WithTheme(props) {
+      return createElement(FelaTheme, undefined, function (theme) {
+        return createElement(component, _extends({}, props, _defineProperty({}, propName, theme)));
+      });
+    };
+
+    return (0, _hoistStatics.default)(WithTheme, component);
+  };
+}
+},{"./hoistStatics":"../node_modules/fela-bindings/es/hoistStatics.js"}],"../node_modules/fela-bindings/es/feFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = feFactory;
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function _toConsumableArray(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return Array.from(arr);
+  }
+}
+
+function _objectWithoutProperties(obj, keys) {
+  var target = {};
+
+  for (var i in obj) {
+    if (keys.indexOf(i) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
+  }
+
+  return target;
+} // Fe was heavily inspired by glam, both the code as well as the name
+// https://github.com/threepointone/glam/blob/master/packages/glam/src/index.js#L83
+
+
+function feFactory(createElement, FelaComponent) {
+  return function fe(type) {
+    for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      children[_key - 2] = arguments[_key];
+    }
+
+    var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    if (props) {
+      var css = props.css,
+          key = props.key,
+          ref = props.ref,
+          className = props.className,
+          otherProps = _objectWithoutProperties(props, ['css', 'key', 'ref', 'className']);
+
+      if (css) {
+        return createElement(FelaComponent, {
+          style: css,
+          key: key,
+          ref: ref
+        }, function (renderProps) {
+          return createElement.apply(undefined, [type, _extends({}, otherProps, {
+            className: className ? className + ' ' + renderProps.className : renderProps.className
+          })].concat(_toConsumableArray(children)));
+        });
+      }
+    }
+
+    return createElement.apply(undefined, [type, props].concat(_toConsumableArray(children)));
+  };
+}
+},{}],"../node_modules/fela-bindings/es/renderToNodeListFactory.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = renderToNodeListFactory;
+
+var _felaDom = require("fela-dom");
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+function renderToNodeListFactory(createElement) {
+  return function renderToNodeList(renderer) {
+    var sheetList = (0, _felaDom.renderToSheetList)(renderer);
+    return sheetList.map(function (_ref) {
+      var type = _ref.type,
+          media = _ref.media,
+          rehydration = _ref.rehydration,
+          support = _ref.support,
+          css = _ref.css;
+      return createElement('style', _extends({
+        key: type + media
+      }, renderer.styleNodeAttributes, {
+        media: media,
+        'data-fela-rehydration': rehydration,
+        'data-fela-type': type,
+        'data-fela-support': support,
+        dangerouslySetInnerHTML: {
+          __html: css
+        }
+      }));
+    });
+  };
+}
+},{"fela-dom":"../node_modules/fela-dom/es/index.js"}],"../node_modules/fela-bindings/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "connectFactory", {
+  enumerable: true,
+  get: function () {
+    return _connectFactory.default;
+  }
+});
+Object.defineProperty(exports, "createComponentFactory", {
+  enumerable: true,
+  get: function () {
+    return _createComponentFactory.default;
+  }
+});
+Object.defineProperty(exports, "FelaComponentFactory", {
+  enumerable: true,
+  get: function () {
+    return _FelaComponentFactory.default;
+  }
+});
+Object.defineProperty(exports, "FelaThemeFactory", {
+  enumerable: true,
+  get: function () {
+    return _FelaThemeFactory.default;
+  }
+});
+Object.defineProperty(exports, "RendererProviderFactory", {
+  enumerable: true,
+  get: function () {
+    return _RendererProviderFactory.default;
+  }
+});
+Object.defineProperty(exports, "ThemeProviderFactory", {
+  enumerable: true,
+  get: function () {
+    return _ThemeProviderFactory.default;
+  }
+});
+Object.defineProperty(exports, "withThemeFactory", {
+  enumerable: true,
+  get: function () {
+    return _withThemeFactory.default;
+  }
+});
+Object.defineProperty(exports, "feFactory", {
+  enumerable: true,
+  get: function () {
+    return _feFactory.default;
+  }
+});
+Object.defineProperty(exports, "renderToNodeListFactory", {
+  enumerable: true,
+  get: function () {
+    return _renderToNodeListFactory.default;
+  }
+});
+
+var _connectFactory = _interopRequireDefault(require("./connectFactory"));
+
+var _createComponentFactory = _interopRequireDefault(require("./createComponentFactory"));
+
+var _FelaComponentFactory = _interopRequireDefault(require("./FelaComponentFactory"));
+
+var _FelaThemeFactory = _interopRequireDefault(require("./FelaThemeFactory"));
+
+var _RendererProviderFactory = _interopRequireDefault(require("./RendererProviderFactory"));
+
+var _ThemeProviderFactory = _interopRequireDefault(require("./ThemeProviderFactory"));
+
+var _withThemeFactory = _interopRequireDefault(require("./withThemeFactory"));
+
+var _feFactory = _interopRequireDefault(require("./feFactory"));
+
+var _renderToNodeListFactory = _interopRequireDefault(require("./renderToNodeListFactory"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./connectFactory":"../node_modules/fela-bindings/es/connectFactory.js","./createComponentFactory":"../node_modules/fela-bindings/es/createComponentFactory.js","./FelaComponentFactory":"../node_modules/fela-bindings/es/FelaComponentFactory.js","./FelaThemeFactory":"../node_modules/fela-bindings/es/FelaThemeFactory.js","./RendererProviderFactory":"../node_modules/fela-bindings/es/RendererProviderFactory.js","./ThemeProviderFactory":"../node_modules/fela-bindings/es/ThemeProviderFactory.js","./withThemeFactory":"../node_modules/fela-bindings/es/withThemeFactory.js","./feFactory":"../node_modules/fela-bindings/es/feFactory.js","./renderToNodeListFactory":"../node_modules/fela-bindings/es/renderToNodeListFactory.js"}],"../node_modules/react-fela/es/context.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ThemeContext = exports.RendererContext = void 0;
+
+var _react = require("react");
+
+// $FlowFixMe
+var RendererContext = (0, _react.createContext)(); // $FlowFixMe
+
+exports.RendererContext = RendererContext;
+var ThemeContext = (0, _react.createContext)();
+exports.ThemeContext = ThemeContext;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/react-fela/es/connect.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _context = require("./context");
+
+var _default = (0, _felaBindings.connectFactory)(_react.Component, _react.createElement, _context.RendererContext, _context.ThemeContext);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./context":"../node_modules/react-fela/es/context.js"}],"../node_modules/react-fela/es/FelaTheme.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _context = require("./context");
+
+var _default = (0, _felaBindings.FelaThemeFactory)(_react.createElement, _context.ThemeContext);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./context":"../node_modules/react-fela/es/context.js"}],"../node_modules/react-fela/es/createComponent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _context = require("./context");
+
+var _FelaTheme = _interopRequireDefault(require("./FelaTheme"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.createComponentFactory)(_react.createElement, _context.RendererContext, _FelaTheme.default);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./context":"../node_modules/react-fela/es/context.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js"}],"../node_modules/react-fela/es/createComponentWithProxy.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _context = require("./context");
+
+var _FelaTheme = _interopRequireDefault(require("./FelaTheme"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.createComponentFactory)(_react.createElement, _context.RendererContext, _FelaTheme.default, true);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./context":"../node_modules/react-fela/es/context.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js"}],"../node_modules/react-fela/es/FelaComponent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _context = require("./context");
+
+var _FelaTheme = _interopRequireDefault(require("./FelaTheme"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.FelaComponentFactory)(_react.createElement, _context.RendererContext, _FelaTheme.default);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./context":"../node_modules/react-fela/es/context.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js"}],"../node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
 /** @license React v16.13.1
  * react-is.development.js
  *
@@ -29146,7 +33340,280 @@ if ("development" !== 'production') {
   // http://fb.me/prop-types-in-prod
   module.exports = require('./factoryWithThrowingShims')();
 }
-},{"react-is":"../node_modules/react-is/index.js","./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"components/Toolbar/components/Button/index.js":[function(require,module,exports) {
+},{"react-is":"../node_modules/react-is/index.js","./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"../node_modules/react-fela/es/RendererProvider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _context = require("./context");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.RendererProviderFactory)(_react.Component, _context.RendererContext, _react.createElement, function (children) {
+  return _react.Children.only(children);
+}, {
+  propTypes: {
+    renderer: _propTypes.default.object.isRequired,
+    rehydrate: _propTypes.default.bool.isRequired
+  },
+  defaultProps: {
+    rehydrate: true
+  }
+});
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","prop-types":"../node_modules/prop-types/index.js","./context":"../node_modules/react-fela/es/context.js"}],"../node_modules/react-fela/es/ThemeProvider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _context = require("./context");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.ThemeProviderFactory)(_context.ThemeContext, _react.createElement, function (children) {
+  return _react.Children.only(children);
+});
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","prop-types":"../node_modules/prop-types/index.js","./context":"../node_modules/react-fela/es/context.js"}],"../node_modules/react-fela/es/useFela.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = useFela;
+
+var _react = require("react");
+
+var _fela = require("fela");
+
+var _context = require("./context");
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+}; // $FlowFixMe
+
+
+function useFela() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var renderer = (0, _react.useContext)(_context.RendererContext);
+  var theme = (0, _react.useContext)(_context.ThemeContext) || {};
+
+  if (!renderer) {
+    throw new Error('The "useFela" hook can only be used  inside a "RendererProvider"');
+  }
+
+  var propsWithTheme = _extends({}, props, {
+    theme: theme
+  });
+
+  function css() {
+    return renderer.renderRule(_fela.combineRules.apply(undefined, arguments), propsWithTheme);
+  }
+
+  return {
+    renderer: renderer,
+    theme: theme,
+    css: css
+  };
+}
+},{"react":"../node_modules/react/index.js","fela":"../node_modules/fela/es/index.js","./context":"../node_modules/react-fela/es/context.js"}],"../node_modules/react-fela/es/withTheme.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _FelaTheme = _interopRequireDefault(require("./FelaTheme"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.withThemeFactory)(_react.createElement, _FelaTheme.default);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js"}],"../node_modules/react-fela/es/renderToNodeList.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _default = (0, _felaBindings.renderToNodeListFactory)(_react.createElement);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js"}],"../node_modules/react-fela/es/fe.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = require("react");
+
+var _felaBindings = require("fela-bindings");
+
+var _FelaComponent = _interopRequireDefault(require("./FelaComponent"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = (0, _felaBindings.feFactory)(_react.createElement, _FelaComponent.default);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","fela-bindings":"../node_modules/fela-bindings/es/index.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js"}],"../node_modules/react-fela/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "connect", {
+  enumerable: true,
+  get: function () {
+    return _connect.default;
+  }
+});
+Object.defineProperty(exports, "createComponent", {
+  enumerable: true,
+  get: function () {
+    return _createComponent.default;
+  }
+});
+Object.defineProperty(exports, "createComponentWithProxy", {
+  enumerable: true,
+  get: function () {
+    return _createComponentWithProxy.default;
+  }
+});
+Object.defineProperty(exports, "FelaComponent", {
+  enumerable: true,
+  get: function () {
+    return _FelaComponent.default;
+  }
+});
+Object.defineProperty(exports, "FelaTheme", {
+  enumerable: true,
+  get: function () {
+    return _FelaTheme.default;
+  }
+});
+Object.defineProperty(exports, "RendererProvider", {
+  enumerable: true,
+  get: function () {
+    return _RendererProvider.default;
+  }
+});
+Object.defineProperty(exports, "ThemeProvider", {
+  enumerable: true,
+  get: function () {
+    return _ThemeProvider.default;
+  }
+});
+Object.defineProperty(exports, "useFela", {
+  enumerable: true,
+  get: function () {
+    return _useFela.default;
+  }
+});
+Object.defineProperty(exports, "withTheme", {
+  enumerable: true,
+  get: function () {
+    return _withTheme.default;
+  }
+});
+Object.defineProperty(exports, "renderToNodeList", {
+  enumerable: true,
+  get: function () {
+    return _renderToNodeList.default;
+  }
+});
+Object.defineProperty(exports, "fe", {
+  enumerable: true,
+  get: function () {
+    return _fe.default;
+  }
+});
+Object.defineProperty(exports, "RendererContext", {
+  enumerable: true,
+  get: function () {
+    return _context.RendererContext;
+  }
+});
+Object.defineProperty(exports, "ThemeContext", {
+  enumerable: true,
+  get: function () {
+    return _context.ThemeContext;
+  }
+});
+exports.FelaRenderer = void 0;
+
+var _connect = _interopRequireDefault(require("./connect"));
+
+var _createComponent = _interopRequireDefault(require("./createComponent"));
+
+var _createComponentWithProxy = _interopRequireDefault(require("./createComponentWithProxy"));
+
+var _FelaComponent = _interopRequireDefault(require("./FelaComponent"));
+
+var _FelaTheme = _interopRequireDefault(require("./FelaTheme"));
+
+var _RendererProvider = _interopRequireDefault(require("./RendererProvider"));
+
+var _ThemeProvider = _interopRequireDefault(require("./ThemeProvider"));
+
+var _useFela = _interopRequireDefault(require("./useFela"));
+
+var _withTheme = _interopRequireDefault(require("./withTheme"));
+
+var _renderToNodeList = _interopRequireDefault(require("./renderToNodeList"));
+
+var _fe = _interopRequireDefault(require("./fe"));
+
+var _context = require("./context");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FelaRenderer = _context.RendererContext.Consumer;
+exports.FelaRenderer = FelaRenderer;
+},{"./connect":"../node_modules/react-fela/es/connect.js","./createComponent":"../node_modules/react-fela/es/createComponent.js","./createComponentWithProxy":"../node_modules/react-fela/es/createComponentWithProxy.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js","./RendererProvider":"../node_modules/react-fela/es/RendererProvider.js","./ThemeProvider":"../node_modules/react-fela/es/ThemeProvider.js","./useFela":"../node_modules/react-fela/es/useFela.js","./withTheme":"../node_modules/react-fela/es/withTheme.js","./renderToNodeList":"../node_modules/react-fela/es/renderToNodeList.js","./fe":"../node_modules/react-fela/es/fe.js","./context":"../node_modules/react-fela/es/context.js"}],"components/Toolbar/components/Button/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29218,79 +33685,7 @@ var EquationAreaButton = function EquationAreaButton() {
 EquationAreaButton.displayName = 'EquationAreaButton';
 var _default = EquationAreaButton;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../Button":"components/Toolbar/components/Button/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
-}
-
-module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"components/Toolbar/style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../Button":"components/Toolbar/components/Button/index.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29300,20 +33695,25 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _reactFela = require("react-fela");
+
 var _TextAreaButton = _interopRequireDefault(require("./components/TextAreaButton"));
 
 var _EquationAreaButton = _interopRequireDefault(require("./components/EquationAreaButton"));
 
-require("./style.css");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var BUTTONS = [_TextAreaButton.default, _EquationAreaButton.default];
+var StyledToolbar = (0, _reactFela.createComponent)(function () {
+  return {
+    position: 'fixed',
+    top: '50%',
+    transform: 'translateY(-50%)'
+  };
+}, 'div');
 
 var Toolbar = function Toolbar() {
-  return /*#__PURE__*/_react.default.createElement("div", {
-    className: "toolbar"
-  }, BUTTONS.map(function (Button) {
+  return /*#__PURE__*/_react.default.createElement(StyledToolbar, null, BUTTONS.map(function (Button) {
     return /*#__PURE__*/_react.default.createElement("div", {
       key: Button.displayName
     }, /*#__PURE__*/_react.default.createElement(Button, null));
@@ -29322,7 +33722,7 @@ var Toolbar = function Toolbar() {
 
 var _default = Toolbar;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./components/TextAreaButton":"components/Toolbar/components/TextAreaButton/index.js","./components/EquationAreaButton":"components/Toolbar/components/EquationAreaButton/index.js","./style.css":"components/Toolbar/style.css"}],"utils/canvas/drawLine.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-fela":"../node_modules/react-fela/es/index.js","./components/TextAreaButton":"components/Toolbar/components/TextAreaButton/index.js","./components/EquationAreaButton":"components/Toolbar/components/EquationAreaButton/index.js"}],"utils/canvas/drawLine.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29398,12 +33798,7 @@ var AXIS_NUM_PADDING = 7;
 exports.AXIS_NUM_PADDING = AXIS_NUM_PADDING;
 var AXIS_TICK_SIZE = 5;
 exports.AXIS_TICK_SIZE = AXIS_TICK_SIZE;
-},{}],"components/Grid/style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Grid/index.js":[function(require,module,exports) {
+},{}],"components/Grid/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29415,17 +33810,24 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _reactFela = require("react-fela");
+
 var _canvas = require("../../utils/canvas");
 
 var _styleConstants = require("./styleConstants");
-
-require("./style.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var GridCanvas = (0, _reactFela.createComponent)(function () {
+  return {
+    width: '100%',
+    height: '100%'
+  };
+}, 'canvas');
 
 var Grid = function Grid(_ref) {
   var size = _ref.size;
@@ -29477,9 +33879,8 @@ var Grid = function Grid(_ref) {
       }
     }
   }, [size]);
-  return /*#__PURE__*/_react.default.createElement("canvas", {
-    className: "grid-canvas",
-    ref: canvasRef
+  return /*#__PURE__*/_react.default.createElement(GridCanvas, {
+    innerRef: canvasRef
   });
 };
 
@@ -29488,12 +33889,7 @@ Grid.propTypes = {
 };
 var _default = Grid;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../utils/canvas":"utils/canvas/index.js","./styleConstants":"components/Grid/styleConstants.js","./style.css":"components/Grid/style.css"}],"components/GridContainer/style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/GridContainer/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-fela":"../node_modules/react-fela/es/index.js","../../utils/canvas":"utils/canvas/index.js","./styleConstants":"components/Grid/styleConstants.js"}],"components/GridContainer/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29503,9 +33899,9 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _Grid = _interopRequireDefault(require("../Grid"));
+var _reactFela = require("react-fela");
 
-require("./style.css");
+var _Grid = _interopRequireDefault(require("../Grid"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29524,6 +33920,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var MAX_NUM_COLUMNS = 20;
+var ScrollTrapContainer = (0, _reactFela.createComponent)(function () {
+  return {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
+    overflowY: 'scroll'
+  };
+}, 'div', ['onScroll']);
+var ScrollTrap = (0, _reactFela.createComponent)(function () {
+  return {
+    width: '100%',
+    height: "calc(100% * ".concat(MAX_NUM_COLUMNS + 1, ")")
+  };
+}, 'div');
 
 var GridContainer = function GridContainer() {
   var _useState = (0, _react.useState)(5),
@@ -29547,28 +33960,27 @@ var GridContainer = function GridContainer() {
     var newSize = Math.ceil(scrollTop / height);
     setSize(newSize === 0 ? 1 : newSize);
   }, [scrollTrapRef]);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
-    className: "scroll-trap-container",
-    onScroll: onScroll,
-    ref: scrollTrapRef
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "scroll-trap-inner"
-  })), /*#__PURE__*/_react.default.createElement("div", {
-    className: "grid-container"
-  }, /*#__PURE__*/_react.default.createElement(_Grid.default, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(ScrollTrapContainer, {
+    innerRef: scrollTrapRef,
+    onScroll: onScroll
+  }, /*#__PURE__*/_react.default.createElement(ScrollTrap, null)), /*#__PURE__*/_react.default.createElement(_Grid.default, {
     onScroll: onScroll,
     size: size
-  })));
+  }));
 };
 
 var _default = GridContainer;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../Grid":"components/Grid/index.js","./style.css":"components/GridContainer/style.css"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-fela":"../node_modules/react-fela/es/index.js","../Grid":"components/Grid/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = require("react-dom");
+
+var _reactFela = require("react-fela");
+
+var _fela = require("fela");
 
 var _Toolbar = _interopRequireDefault(require("./components/Toolbar"));
 
@@ -29576,12 +33988,16 @@ var _GridContainer = _interopRequireDefault(require("./components/GridContainer"
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var renderer = (0, _fela.createRenderer)();
+
 var App = function App() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null));
+  return /*#__PURE__*/_react.default.createElement(_reactFela.RendererProvider, {
+    renderer: renderer
+  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null)));
 };
 
 (0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById('root'));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./components/Toolbar":"components/Toolbar/index.js","./components/GridContainer":"components/GridContainer/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-fela":"../node_modules/react-fela/es/index.js","fela":"../node_modules/fela/es/index.js","./components/Toolbar":"components/Toolbar/index.js","./components/GridContainer":"components/GridContainer/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -29609,7 +34025,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51136" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57554" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

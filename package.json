@@ -7,10 +7,12 @@
     "start": "parcel src/index.html -p 4200"
   },
   "dependencies": {
+    "fela": "^11.3.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-fela": "^11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

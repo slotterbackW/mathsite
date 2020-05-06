@@ -1,19 +1,28 @@
 import React from 'react';
+import { createComponent } from 'react-fela';
 
 import TextAreaButton from './components/TextAreaButton';
 import EquationAreaButton from './components/EquationAreaButton';
-import './style.css';
 
 const BUTTONS = [TextAreaButton, EquationAreaButton];
 
+const StyledToolbar = createComponent(
+  () => ({
+    position: 'fixed',
+    top: '50%',
+    transform: 'translateY(-50%)',
+  }),
+  'div',
+);
+
 const Toolbar = () => (
-  <div className="toolbar">
+  <StyledToolbar>
     {BUTTONS.map((Button) => (
       <div key={Button.displayName}>
         <Button />
       </div>
     ))}
-  </div>
+  </StyledToolbar>
 );
 
 export default Toolbar;

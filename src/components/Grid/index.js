@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { createComponent } from 'react-fela';
 
 import { drawLine } from '../../utils/canvas';
 
@@ -11,7 +12,14 @@ import {
   AXIS_NUM_PADDING,
   AXIS_TICK_SIZE,
 } from './styleConstants';
-import './style.css';
+
+const GridCanvas = createComponent(
+  () => ({
+    width: '100%',
+    height: '100%',
+  }),
+  'canvas',
+);
 
 const Grid = ({ size }) => {
   const canvasRef = useRef(null);
@@ -94,7 +102,7 @@ const Grid = ({ size }) => {
     }
   }, [size]);
 
-  return <canvas className="grid-canvas" ref={canvasRef} />;
+  return <GridCanvas innerRef={canvasRef} />;
 };
 
 Grid.propTypes = {

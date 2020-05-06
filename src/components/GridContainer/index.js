@@ -1,9 +1,31 @@
 import React, {
   useState, useCallback, useEffect, useRef,
 } from 'react';
+import { createComponent } from 'react-fela';
 
 import Grid from '../Grid';
-import './style.css';
+
+const MAX_NUM_COLUMNS = 20;
+
+const ScrollTrapContainer = createComponent(
+  () => ({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
+    overflowY: 'scroll',
+  }),
+  'div',
+  ['onScroll'],
+);
+
+const ScrollTrap = createComponent(
+  () => ({
+    width: '100%',
+    height: `calc(100% * ${MAX_NUM_COLUMNS + 1})`,
+  }),
+  'div',
+);
 
 const GridContainer = () => {
   const [size, setSize] = useState(5);
@@ -23,16 +45,10 @@ const GridContainer = () => {
 
   return (
     <>
-      <div
-        className="scroll-trap-container"
-        onScroll={onScroll}
-        ref={scrollTrapRef}
-      >
-        <div className="scroll-trap-inner" />
-      </div>
-      <div className="grid-container">
-        <Grid onScroll={onScroll} size={size} />
-      </div>
+      <ScrollTrapContainer innerRef={scrollTrapRef} onScroll={onScroll}>
+        <ScrollTrap />
+      </ScrollTrapContainer>
+      <Grid onScroll={onScroll} size={size} />
     </>
   );
 };
