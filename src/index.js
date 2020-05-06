@@ -1,6 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
 
-const App = () => <h1>Mathsite</h1>;
+import GridContainer from "./components/GridContainer";
+
+const App = () => {
+  return <GridContainer />;
+};
 
 render(<App />, document.getElementById("root"));

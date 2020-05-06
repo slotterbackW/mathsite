@@ -28285,21 +28285,278 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"index.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"components/Grid/styleConstants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AXIS_TICK_SIZE = exports.AXIS_NUM_PADDING = exports.AXIS_LABEL_PADDING_FROM_AXIS = exports.AXIS_LABEL_PADDING_FROM_END = exports.AXIS_LINE_WIDTH = exports.GRID_LINE_WIDTH = void 0;
+var GRID_LINE_WIDTH = 0.3;
+exports.GRID_LINE_WIDTH = GRID_LINE_WIDTH;
+var AXIS_LINE_WIDTH = 1.5;
+exports.AXIS_LINE_WIDTH = AXIS_LINE_WIDTH;
+var AXIS_LABEL_PADDING_FROM_END = 14;
+exports.AXIS_LABEL_PADDING_FROM_END = AXIS_LABEL_PADDING_FROM_END;
+var AXIS_LABEL_PADDING_FROM_AXIS = 4;
+exports.AXIS_LABEL_PADDING_FROM_AXIS = AXIS_LABEL_PADDING_FROM_AXIS;
+var AXIS_NUM_PADDING = 7;
+exports.AXIS_NUM_PADDING = AXIS_NUM_PADDING;
+var AXIS_TICK_SIZE = 5;
+exports.AXIS_TICK_SIZE = AXIS_TICK_SIZE;
+},{}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"components/Grid/style.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Grid/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styleConstants = require("./styleConstants");
+
+require("./style.css");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var drawLine = function drawLine(ctx, x1, y1, x2, y2) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+};
+
+var drawCircle = function drawCircle(context, x, y, diameter) {
+  context.beginPath();
+  context.arc(x, y, diameter / 2, 0, 2 * Math.PI);
+  context.fill();
+};
+
+var Grid = function Grid(_ref) {
+  var size = _ref.size;
+  var canvasRef = (0, _react.useRef)(null);
+  (0, _react.useLayoutEffect)(function () {
+    var canvas = canvasRef.current;
+    var context = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight; // Different from canvas.width and canvas.height
+
+    var _canvas$getBoundingCl = canvas.getBoundingClientRect(),
+        height = _canvas$getBoundingCl.height,
+        width = _canvas$getBoundingCl.width;
+
+    var maxCanvasSize = Math.min(height, width); // Grid lines
+
+    var increment = maxCanvasSize / (size * 2);
+
+    for (var point = increment; Math.floor(point) < Math.floor(maxCanvasSize); point += increment) {
+      context.lineWidth = _styleConstants.GRID_LINE_WIDTH;
+
+      if (Math.floor(point) === Math.floor(maxCanvasSize / 2)) {
+        context.lineWidth = _styleConstants.AXIS_LINE_WIDTH;
+      }
+
+      drawLine(context, width / 2 - maxCanvasSize / 2, point, width / 2 + maxCanvasSize / 2, point); // y coordinates
+
+      drawLine(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2); // x coordinates
+    } // Origin point
+    // context.font = "normal 14px sans-serif";
+    // context.textBaseline = "top";
+    // context.fillText("(0, 0)", width / 2 + 3, height / 2 + 3);
+    // drawCircle(context, width / 2, height / 2, 8);
+    // X axis label
+
+
+    context.font = "normal 16px sans-serif";
+    context.textBaseline = "bottom";
+    context.fillText("X", width / 2 + maxCanvasSize / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END, height / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS); // Y axis label
+
+    context.font = "normal 16px sans-serif";
+    context.textBaseline = "top";
+    context.fillText("Y", width / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END, height / 2 - maxCanvasSize / 2 + _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS); // X axis ticks and labels
+
+    context.font = "normal 14px sans-serif";
+    context.textAlign = "center";
+    context.textBaseline = "top";
+
+    for (var x = 0; x <= size * 2; x++) {
+      if (x - size !== 0) {
+        context.fillText("".concat(x - size), width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_NUM_PADDING);
+        context.lineWidth = 1.5;
+        drawLine(context, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 - _styleConstants.AXIS_TICK_SIZE, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_TICK_SIZE);
+      }
+    }
+  }, [size]);
+  return /*#__PURE__*/_react.default.createElement("canvas", {
+    className: "grid-canvas",
+    ref: canvasRef
+  });
+};
+
+var _default = Grid;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./styleConstants":"components/Grid/styleConstants.js","./style.css":"components/Grid/style.css"}],"components/GridContainer/style.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/GridContainer/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _Grid = _interopRequireDefault(require("../Grid"));
+
+require("./style.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var GridContainer = function GridContainer() {
+  var _useState = (0, _react.useState)(5),
+      _useState2 = _slicedToArray(_useState, 2),
+      size = _useState2[0],
+      setSize = _useState2[1];
+
+  var scrollTrapRef = (0, _react.useRef)(null);
+  (0, _react.useEffect)(function () {
+    var height = scrollTrapRef.current.getBoundingClientRect().height;
+    scrollTrapRef.current.scrollTop = height * size - 1;
+  }, []);
+  var onScroll = (0, _react.useCallback)(function (e) {
+    var scrollTop = scrollTrapRef.current.scrollTop;
+    var height = scrollTrapRef.current.getBoundingClientRect().height;
+    var size = Math.ceil(scrollTop / height);
+    setSize(size === 0 ? 1 : size);
+  }, [scrollTrapRef]);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "scroll-trap-container",
+    onScroll: onScroll,
+    ref: scrollTrapRef
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "scroll-trap-inner"
+  })), /*#__PURE__*/_react.default.createElement("div", {
+    className: "grid-container"
+  }, /*#__PURE__*/_react.default.createElement(_Grid.default, {
+    onScroll: onScroll,
+    size: size
+  })));
+};
+
+var _default = GridContainer;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","../Grid":"components/Grid/index.js","./style.css":"components/GridContainer/style.css"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = require("react-dom");
 
+var _GridContainer = _interopRequireDefault(require("./components/GridContainer"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-  return /*#__PURE__*/_react.default.createElement("h1", null, "Mathsite");
+  return /*#__PURE__*/_react.default.createElement(_GridContainer.default, null);
 };
 
 (0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById("root"));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./components/GridContainer":"components/GridContainer/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -28327,7 +28584,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57861" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49782" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
