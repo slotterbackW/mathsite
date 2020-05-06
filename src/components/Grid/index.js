@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 import {
   GRID_LINE_WIDTH,
@@ -6,9 +7,9 @@ import {
   AXIS_LABEL_PADDING_FROM_END,
   AXIS_LABEL_PADDING_FROM_AXIS,
   AXIS_NUM_PADDING,
-  AXIS_TICK_SIZE
-} from "./styleConstants";
-import "./style.css";
+  AXIS_TICK_SIZE,
+} from './styleConstants';
+import './style.css';
 
 const drawLine = (ctx, x1, y1, x2, y2) => {
   ctx.beginPath();
@@ -17,18 +18,18 @@ const drawLine = (ctx, x1, y1, x2, y2) => {
   ctx.stroke();
 };
 
-const drawCircle = (context, x, y, diameter) => {
-  context.beginPath();
-  context.arc(x, y, diameter / 2, 0, 2 * Math.PI);
-  context.fill();
-};
+// const drawCircle = (context, x, y, diameter) => {
+//   context.beginPath();
+//   context.arc(x, y, diameter / 2, 0, 2 * Math.PI);
+//   context.fill();
+// };
 
 const Grid = ({ size }) => {
   const canvasRef = useRef(null);
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // Different from canvas.width and canvas.height
@@ -51,14 +52,14 @@ const Grid = ({ size }) => {
         width / 2 - maxCanvasSize / 2,
         point,
         width / 2 + maxCanvasSize / 2,
-        point
+        point,
       ); // y coordinates
       drawLine(
         context,
         width / 2 - maxCanvasSize / 2 + point,
         height / 2 - maxCanvasSize / 2,
         width / 2 - maxCanvasSize / 2 + point,
-        height / 2 + maxCanvasSize / 2
+        height / 2 + maxCanvasSize / 2,
       ); // x coordinates
     }
 
@@ -69,33 +70,33 @@ const Grid = ({ size }) => {
     // drawCircle(context, width / 2, height / 2, 8);
 
     // X axis label
-    context.font = "normal 16px sans-serif";
-    context.textBaseline = "bottom";
+    context.font = 'normal 16px sans-serif';
+    context.textBaseline = 'bottom';
     context.fillText(
-      "X",
+      'X',
       width / 2 + maxCanvasSize / 2 - AXIS_LABEL_PADDING_FROM_END,
-      height / 2 - AXIS_LABEL_PADDING_FROM_AXIS
+      height / 2 - AXIS_LABEL_PADDING_FROM_AXIS,
     );
 
     // Y axis label
-    context.font = "normal 16px sans-serif";
-    context.textBaseline = "top";
+    context.font = 'normal 16px sans-serif';
+    context.textBaseline = 'top';
     context.fillText(
-      "Y",
+      'Y',
       width / 2 - AXIS_LABEL_PADDING_FROM_END,
-      height / 2 - maxCanvasSize / 2 + AXIS_LABEL_PADDING_FROM_AXIS
+      height / 2 - maxCanvasSize / 2 + AXIS_LABEL_PADDING_FROM_AXIS,
     );
 
     // X axis ticks and labels
-    context.font = "normal 14px sans-serif";
-    context.textAlign = "center";
-    context.textBaseline = "top";
-    for (let x = 0; x <= size * 2; x++) {
+    context.font = 'normal 14px sans-serif';
+    context.textAlign = 'center';
+    context.textBaseline = 'top';
+    for (let x = 0; x <= size * 2; x += 1) {
       if (x - size !== 0) {
         context.fillText(
           `${x - size}`,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_NUM_PADDING
+          height / 2 + AXIS_NUM_PADDING,
         );
 
         context.lineWidth = 1.5;
@@ -104,13 +105,17 @@ const Grid = ({ size }) => {
           width / 2 - maxCanvasSize / 2 + x * increment,
           height / 2 - AXIS_TICK_SIZE,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_TICK_SIZE
+          height / 2 + AXIS_TICK_SIZE,
         );
       }
     }
   }, [size]);
 
   return <canvas className="grid-canvas" ref={canvasRef} />;
+};
+
+Grid.propTypes = {
+  size: PropTypes.number.isRequired,
 };
 
 export default Grid;
