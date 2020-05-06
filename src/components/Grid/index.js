@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import { drawLine } from '../../utils/canvas';
+
 import {
   GRID_LINE_WIDTH,
   AXIS_LINE_WIDTH,
@@ -10,19 +12,6 @@ import {
   AXIS_TICK_SIZE,
 } from './styleConstants';
 import './style.css';
-
-const drawLine = (ctx, x1, y1, x2, y2) => {
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-};
-
-// const drawCircle = (context, x, y, diameter) => {
-//   context.beginPath();
-//   context.arc(x, y, diameter / 2, 0, 2 * Math.PI);
-//   context.fill();
-// };
 
 const Grid = ({ size }) => {
   const canvasRef = useRef(null);
@@ -62,12 +51,6 @@ const Grid = ({ size }) => {
         height / 2 + maxCanvasSize / 2,
       ); // x coordinates
     }
-
-    // Origin point
-    // context.font = "normal 14px sans-serif";
-    // context.textBaseline = "top";
-    // context.fillText("(0, 0)", width / 2 + 3, height / 2 + 3);
-    // drawCircle(context, width / 2, height / 2, 8);
 
     // X axis label
     context.font = 'normal 16px sans-serif';
