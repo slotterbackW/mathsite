@@ -33613,7 +33613,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var FelaRenderer = _context.RendererContext.Consumer;
 exports.FelaRenderer = FelaRenderer;
-},{"./connect":"../node_modules/react-fela/es/connect.js","./createComponent":"../node_modules/react-fela/es/createComponent.js","./createComponentWithProxy":"../node_modules/react-fela/es/createComponentWithProxy.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js","./RendererProvider":"../node_modules/react-fela/es/RendererProvider.js","./ThemeProvider":"../node_modules/react-fela/es/ThemeProvider.js","./useFela":"../node_modules/react-fela/es/useFela.js","./withTheme":"../node_modules/react-fela/es/withTheme.js","./renderToNodeList":"../node_modules/react-fela/es/renderToNodeList.js","./fe":"../node_modules/react-fela/es/fe.js","./context":"../node_modules/react-fela/es/context.js"}],"components/Toolbar/components/Button/index.js":[function(require,module,exports) {
+},{"./connect":"../node_modules/react-fela/es/connect.js","./createComponent":"../node_modules/react-fela/es/createComponent.js","./createComponentWithProxy":"../node_modules/react-fela/es/createComponentWithProxy.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js","./RendererProvider":"../node_modules/react-fela/es/RendererProvider.js","./ThemeProvider":"../node_modules/react-fela/es/ThemeProvider.js","./useFela":"../node_modules/react-fela/es/useFela.js","./withTheme":"../node_modules/react-fela/es/withTheme.js","./renderToNodeList":"../node_modules/react-fela/es/renderToNodeList.js","./fe":"../node_modules/react-fela/es/fe.js","./context":"../node_modules/react-fela/es/context.js"}],"assets/text.svg":[function(require,module,exports) {
+module.exports = "/text.e016ac46.svg";
+},{}],"components/Toolbar/components/Button/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33625,21 +33627,47 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _reactFela = require("react-fela");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var StyledButton = (0, _reactFela.createComponent)(function () {
+  return {
+    background: 'white',
+    transition: 'background 0.25s, border-color 0.25s',
+    borderRadius: '50%',
+    padding: '12px',
+    margin: '8px 0',
+    ':hover': {
+      background: '#AED6F1',
+      cursor: 'pointer',
+      borderColor: 'black'
+    },
+    ':focus': {
+      outline: 'none'
+    }
+  };
+}, 'button', ['onClick', 'type']);
+
 var Button = function Button(_ref) {
-  var text = _ref.text;
-  return /*#__PURE__*/_react.default.createElement("button", {
-    type: "button"
-  }, text);
+  var onClick = _ref.onClick,
+      children = _ref.children;
+  return /*#__PURE__*/_react.default.createElement(StyledButton, {
+    type: "button",
+    onClick: onClick
+  }, children);
 };
 
 Button.propTypes = {
-  text: _propTypes.default.string.isRequired
+  onClick: _propTypes.default.func,
+  children: _propTypes.default.node.isRequired
+};
+Button.defaultProps = {
+  onClick: function onClick() {}
 };
 var _default = Button;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"components/Toolbar/components/TextAreaButton/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-fela":"../node_modules/react-fela/es/index.js"}],"components/Toolbar/components/TextAreaButton/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33648,21 +33676,34 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _text = _interopRequireDefault(require("../../../../assets/text.svg"));
 
 var _Button = _interopRequireDefault(require("../Button"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TextAreaButton = function TextAreaButton() {
+  var onClick = function onClick(e) {
+    console.log('Click', e);
+  };
+
   return /*#__PURE__*/_react.default.createElement(_Button.default, {
-    text: "Text Area"
-  });
+    onClick: onClick
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: _text.default,
+    alt: "Text Area Button",
+    width: "24px",
+    height: "24px"
+  }));
 };
 
 TextAreaButton.displayName = 'TextAreaButton';
 var _default = TextAreaButton;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../Button":"components/Toolbar/components/Button/index.js"}],"components/Toolbar/components/EquationAreaButton/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../../../../assets/text.svg":"assets/text.svg","../Button":"components/Toolbar/components/Button/index.js"}],"assets/sqroot.svg":[function(require,module,exports) {
+module.exports = "/sqroot.242bf77d.svg";
+},{}],"components/Toolbar/components/EquationAreaButton/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33671,21 +33712,32 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _sqroot = _interopRequireDefault(require("../../../../assets/sqroot.svg"));
 
 var _Button = _interopRequireDefault(require("../Button"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var EquationAreaButton = function EquationAreaButton() {
+  var onClick = function onClick(e) {
+    console.log('Click', e);
+  };
+
   return /*#__PURE__*/_react.default.createElement(_Button.default, {
-    text: "Equation Area"
-  });
+    onClick: onClick
+  }, /*#__PURE__*/_react.default.createElement("img", {
+    src: _sqroot.default,
+    alt: "Formula Button",
+    width: "24px",
+    height: "24px"
+  }));
 };
 
 EquationAreaButton.displayName = 'EquationAreaButton';
 var _default = EquationAreaButton;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../Button":"components/Toolbar/components/Button/index.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../../../../assets/sqroot.svg":"assets/sqroot.svg","../Button":"components/Toolbar/components/Button/index.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33693,7 +33745,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactFela = require("react-fela");
 
@@ -33703,17 +33755,30 @@ var _EquationAreaButton = _interopRequireDefault(require("./components/EquationA
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 var BUTTONS = [_TextAreaButton.default, _EquationAreaButton.default];
 var StyledToolbar = (0, _reactFela.createComponent)(function () {
   return {
     position: 'fixed',
     top: '50%',
-    transform: 'translateY(-50%)'
+    transform: 'translateY(-50%)',
+    border: '1px solid rgb(189, 195, 199, 0.7)',
+    borderRadius: '5px',
+    background: 'rgb(253, 254, 254, 0.7)',
+    padding: '0.5rem',
+    left: '0',
+    marginTop: '-16px'
   };
 }, 'div');
 
 var Toolbar = function Toolbar() {
-  return /*#__PURE__*/_react.default.createElement(StyledToolbar, null, BUTTONS.map(function (Button) {
+  var toolbarRef = (0, _react.useRef)(null);
+  return /*#__PURE__*/_react.default.createElement(StyledToolbar, {
+    innerRef: toolbarRef
+  }, BUTTONS.map(function (Button) {
     return /*#__PURE__*/_react.default.createElement("div", {
       key: Button.displayName
     }, /*#__PURE__*/_react.default.createElement(Button, null));
@@ -33785,7 +33850,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AXIS_TICK_SIZE = exports.AXIS_NUM_PADDING = exports.AXIS_LABEL_PADDING_FROM_AXIS = exports.AXIS_LABEL_PADDING_FROM_END = exports.AXIS_LINE_WIDTH = exports.GRID_LINE_WIDTH = void 0;
+exports.TOP_PADDING = exports.AXIS_TICK_SIZE = exports.AXIS_NUM_PADDING = exports.AXIS_LABEL_PADDING_FROM_AXIS = exports.AXIS_LABEL_PADDING_FROM_END = exports.AXIS_LINE_WIDTH = exports.GRID_LINE_WIDTH = void 0;
 var GRID_LINE_WIDTH = 0.3;
 exports.GRID_LINE_WIDTH = GRID_LINE_WIDTH;
 var AXIS_LINE_WIDTH = 1.5;
@@ -33798,6 +33863,8 @@ var AXIS_NUM_PADDING = 7;
 exports.AXIS_NUM_PADDING = AXIS_NUM_PADDING;
 var AXIS_TICK_SIZE = 5;
 exports.AXIS_TICK_SIZE = AXIS_TICK_SIZE;
+var TOP_PADDING = 12;
+exports.TOP_PADDING = TOP_PADDING;
 },{}],"components/Grid/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -33853,19 +33920,19 @@ var Grid = function Grid(_ref) {
         context.lineWidth = _styleConstants.AXIS_LINE_WIDTH;
       }
 
-      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2, point, width / 2 + maxCanvasSize / 2, point); // y coordinates
+      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2, point + _styleConstants.TOP_PADDING, width / 2 + maxCanvasSize / 2, point + _styleConstants.TOP_PADDING); // horizontal lines
 
-      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2); // x coordinates
+      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2 + _styleConstants.TOP_PADDING, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2 + _styleConstants.TOP_PADDING); // vertical lines
     } // X axis label
 
 
     context.font = 'normal 16px sans-serif';
-    context.textBaseline = 'bottom';
+    context.textBaseline = 'middle';
     context.fillText('X', width / 2 + maxCanvasSize / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END, height / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS); // Y axis label
 
     context.font = 'normal 16px sans-serif';
-    context.textBaseline = 'top';
-    context.fillText('Y', width / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END, height / 2 - maxCanvasSize / 2 + _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS); // X axis ticks and labels
+    context.textBaseline = 'middle';
+    context.fillText('Y', width / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END - 8, height / 2 - maxCanvasSize / 2 + _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS + _styleConstants.TOP_PADDING); // X axis ticks and labels
 
     context.font = 'normal 14px sans-serif';
     context.textAlign = 'center';
@@ -33873,9 +33940,22 @@ var Grid = function Grid(_ref) {
 
     for (var x = 0; x <= size * 2; x += 1) {
       if (x - size !== 0) {
-        context.fillText("".concat(x - size), width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_NUM_PADDING);
+        context.fillText("".concat(x - size), width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_NUM_PADDING + _styleConstants.TOP_PADDING);
         context.lineWidth = 1.5;
-        (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 - _styleConstants.AXIS_TICK_SIZE, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_TICK_SIZE);
+        (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 - _styleConstants.AXIS_TICK_SIZE + _styleConstants.TOP_PADDING, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_TICK_SIZE + _styleConstants.TOP_PADDING);
+      }
+    } // Y axis ticks and labels
+
+
+    context.font = 'normal 14px sans-serif';
+    context.textAlign = 'start';
+    context.textBaseline = 'middle';
+
+    for (var y = 0; y <= size * 2; y += 1) {
+      if (y - size !== 0) {
+        context.fillText("".concat(size - y), width / 2 + _styleConstants.AXIS_NUM_PADDING, y * increment + _styleConstants.TOP_PADDING);
+        context.lineWidth = 1.5;
+        (0, _canvas.drawLine)(context, width / 2 - _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.TOP_PADDING, width / 2 + _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.TOP_PADDING);
       }
     }
   }, [size]);
@@ -33925,6 +34005,7 @@ var MAX_NUM_COLUMNS = 20;
 var ScrollTrapContainer = (0, _reactFela.createComponent)(function () {
   return {
     position: 'absolute',
+    marginLeft: '70px',
     width: '100%',
     height: '100%',
     maxHeight: '100%',
@@ -33993,7 +34074,11 @@ var renderer = (0, _fela.createRenderer)();
 var App = function App() {
   return /*#__PURE__*/_react.default.createElement(_reactFela.RendererProvider, {
     renderer: renderer
-  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null)));
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    style: {
+      padding: '8px'
+    }
+  }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null)));
 };
 
 (0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById('root'));
@@ -34025,7 +34110,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57554" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51875" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

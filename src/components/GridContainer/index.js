@@ -10,6 +10,7 @@ const MAX_NUM_COLUMNS = 20;
 const ScrollTrapContainer = createComponent(
   () => ({
     position: 'absolute',
+    marginLeft: '70px',
     width: '100%',
     height: '100%',
     maxHeight: '100%',

@@ -10,7 +10,7 @@ const renderer = createRenderer();
 
 const App = () => (
   <RendererProvider renderer={renderer}>
-    <div>
+    <div style={{ padding: '8px' }}>
       <Toolbar />
       <GridContainer />
     </div>

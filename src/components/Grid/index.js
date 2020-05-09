@@ -11,6 +11,7 @@ import {
   AXIS_LABEL_PADDING_FROM_AXIS,
   AXIS_NUM_PADDING,
   AXIS_TICK_SIZE,
+  TOP_PADDING,
 } from './styleConstants';
 
 const GridCanvas = createComponent(
@@ -47,22 +48,22 @@ const Grid = ({ size }) => {
       drawLine(
         context,
         width / 2 - maxCanvasSize / 2,
-        point,
+        point + TOP_PADDING,
         width / 2 + maxCanvasSize / 2,
-        point,
-      ); // y coordinates
+        point + TOP_PADDING,
+      ); // horizontal lines
       drawLine(
         context,
         width / 2 - maxCanvasSize / 2 + point,
-        height / 2 - maxCanvasSize / 2,
+        height / 2 - maxCanvasSize / 2 + TOP_PADDING,
         width / 2 - maxCanvasSize / 2 + point,
-        height / 2 + maxCanvasSize / 2,
-      ); // x coordinates
+        height / 2 + maxCanvasSize / 2 + TOP_PADDING,
+      ); // vertical lines
     }
 
     // X axis label
     context.font = 'normal 16px sans-serif';
-    context.textBaseline = 'bottom';
+    context.textBaseline = 'middle';
     context.fillText(
       'X',
       width / 2 + maxCanvasSize / 2 - AXIS_LABEL_PADDING_FROM_END,
@@ -71,11 +72,14 @@ const Grid = ({ size }) => {
 
     // Y axis label
     context.font = 'normal 16px sans-serif';
-    context.textBaseline = 'top';
+    context.textBaseline = 'middle';
     context.fillText(
       'Y',
-      width / 2 - AXIS_LABEL_PADDING_FROM_END,
-      height / 2 - maxCanvasSize / 2 + AXIS_LABEL_PADDING_FROM_AXIS,
+      width / 2 - AXIS_LABEL_PADDING_FROM_END - 8,
+      height / 2
+        - maxCanvasSize / 2
+        + AXIS_LABEL_PADDING_FROM_AXIS
+        + TOP_PADDING,
     );
 
     // X axis ticks and labels
@@ -87,16 +91,39 @@ const Grid = ({ size }) => {
         context.fillText(
           `${x - size}`,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_NUM_PADDING,
+          height / 2 + AXIS_NUM_PADDING + TOP_PADDING,
         );
 
         context.lineWidth = 1.5;
         drawLine(
           context,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 - AXIS_TICK_SIZE,
+          height / 2 - AXIS_TICK_SIZE + TOP_PADDING,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_TICK_SIZE,
+          height / 2 + AXIS_TICK_SIZE + TOP_PADDING,
+        );
+      }
+    }
+
+    // Y axis ticks and labels
+    context.font = 'normal 14px sans-serif';
+    context.textAlign = 'start';
+    context.textBaseline = 'middle';
+    for (let y = 0; y <= size * 2; y += 1) {
+      if (y - size !== 0) {
+        context.fillText(
+          `${size - y}`,
+          width / 2 + AXIS_NUM_PADDING,
+          y * increment + TOP_PADDING,
+        );
+
+        context.lineWidth = 1.5;
+        drawLine(
+          context,
+          width / 2 - AXIS_TICK_SIZE,
+          y * increment + TOP_PADDING,
+          width / 2 + AXIS_TICK_SIZE,
+          y * increment + TOP_PADDING,
         );
       }
     }
