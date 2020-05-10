@@ -11,7 +11,7 @@ import {
   AXIS_LABEL_PADDING_FROM_AXIS,
   AXIS_NUM_PADDING,
   AXIS_TICK_SIZE,
-  TOP_PADDING,
+  PADDING,
 } from './styleConstants';
 
 const GridCanvas = createComponent(
@@ -31,7 +31,9 @@ const Grid = ({ size }) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // Different from canvas.width and canvas.height
-    const { height, width } = canvas.getBoundingClientRect();
+    let { height, width } = canvas.getBoundingClientRect();
+    height -= PADDING * 2;
+    width -= PADDING * 2;
     const maxCanvasSize = Math.min(height, width);
 
     // Grid lines
@@ -45,19 +47,22 @@ const Grid = ({ size }) => {
       if (Math.floor(point) === Math.floor(maxCanvasSize / 2)) {
         context.lineWidth = AXIS_LINE_WIDTH;
       }
+      // horizontal lines
       drawLine(
         context,
         width / 2 - maxCanvasSize / 2,
-        point + TOP_PADDING,
+        point + PADDING,
         width / 2 + maxCanvasSize / 2,
-        point + TOP_PADDING,
-      ); // horizontal lines
+        point + PADDING,
+      );
+
+      // vertical lines
       drawLine(
         context,
         width / 2 - maxCanvasSize / 2 + point,
-        height / 2 - maxCanvasSize / 2 + TOP_PADDING,
+        height / 2 - maxCanvasSize / 2 + PADDING,
         width / 2 - maxCanvasSize / 2 + point,
-        height / 2 + maxCanvasSize / 2 + TOP_PADDING,
+        height / 2 + maxCanvasSize / 2 + PADDING,
       ); // vertical lines
     }
 
@@ -76,10 +81,7 @@ const Grid = ({ size }) => {
     context.fillText(
       'Y',
       width / 2 - AXIS_LABEL_PADDING_FROM_END - 8,
-      height / 2
-        - maxCanvasSize / 2
-        + AXIS_LABEL_PADDING_FROM_AXIS
-        + TOP_PADDING,
+      height / 2 - maxCanvasSize / 2 + AXIS_LABEL_PADDING_FROM_AXIS + PADDING,
     );
 
     // X axis ticks and labels
@@ -91,16 +93,16 @@ const Grid = ({ size }) => {
         context.fillText(
           `${x - size}`,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_NUM_PADDING + TOP_PADDING,
+          height / 2 + AXIS_NUM_PADDING + PADDING,
         );
 
         context.lineWidth = 1.5;
         drawLine(
           context,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 - AXIS_TICK_SIZE + TOP_PADDING,
+          height / 2 - AXIS_TICK_SIZE + PADDING,
           width / 2 - maxCanvasSize / 2 + x * increment,
-          height / 2 + AXIS_TICK_SIZE + TOP_PADDING,
+          height / 2 + AXIS_TICK_SIZE + PADDING,
         );
       }
     }
@@ -114,16 +116,16 @@ const Grid = ({ size }) => {
         context.fillText(
           `${size - y}`,
           width / 2 + AXIS_NUM_PADDING,
-          y * increment + TOP_PADDING,
+          y * increment + PADDING,
         );
 
         context.lineWidth = 1.5;
         drawLine(
           context,
           width / 2 - AXIS_TICK_SIZE,
-          y * increment + TOP_PADDING,
+          y * increment + PADDING,
           width / 2 + AXIS_TICK_SIZE,
-          y * increment + TOP_PADDING,
+          y * increment + PADDING,
         );
       }
     }

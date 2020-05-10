@@ -5,6 +5,8 @@ import { createComponent } from 'react-fela';
 
 import Grid from '../Grid';
 
+import { PADDING } from '../Grid/styleConstants';
+
 const MAX_NUM_COLUMNS = 20;
 
 const ScrollTrapContainer = createComponent(
@@ -15,6 +17,7 @@ const ScrollTrapContainer = createComponent(
     height: '100%',
     maxHeight: '100%',
     overflowY: 'scroll',
+    zIndex: '-1',
   }),
   'div',
   ['onScroll'],
@@ -24,6 +27,15 @@ const ScrollTrap = createComponent(
   () => ({
     width: '100%',
     height: `calc(100% * ${MAX_NUM_COLUMNS + 1})`,
+  }),
+  'div',
+);
+
+const StyledGridContainer = createComponent(
+  () => ({
+    position: 'absolute',
+    padding: `${PADDING}px`,
+    zIndex: '-2',
   }),
   'div',
 );
@@ -49,7 +61,9 @@ const GridContainer = () => {
       <ScrollTrapContainer innerRef={scrollTrapRef} onScroll={onScroll}>
         <ScrollTrap />
       </ScrollTrapContainer>
-      <Grid onScroll={onScroll} size={size} />
+      <StyledGridContainer>
+        <Grid onScroll={onScroll} size={size} />
+      </StyledGridContainer>
     </>
   );
 };

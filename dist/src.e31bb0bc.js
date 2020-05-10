@@ -33613,7 +33613,103 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var FelaRenderer = _context.RendererContext.Consumer;
 exports.FelaRenderer = FelaRenderer;
-},{"./connect":"../node_modules/react-fela/es/connect.js","./createComponent":"../node_modules/react-fela/es/createComponent.js","./createComponentWithProxy":"../node_modules/react-fela/es/createComponentWithProxy.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js","./RendererProvider":"../node_modules/react-fela/es/RendererProvider.js","./ThemeProvider":"../node_modules/react-fela/es/ThemeProvider.js","./useFela":"../node_modules/react-fela/es/useFela.js","./withTheme":"../node_modules/react-fela/es/withTheme.js","./renderToNodeList":"../node_modules/react-fela/es/renderToNodeList.js","./fe":"../node_modules/react-fela/es/fe.js","./context":"../node_modules/react-fela/es/context.js"}],"assets/text.svg":[function(require,module,exports) {
+},{"./connect":"../node_modules/react-fela/es/connect.js","./createComponent":"../node_modules/react-fela/es/createComponent.js","./createComponentWithProxy":"../node_modules/react-fela/es/createComponentWithProxy.js","./FelaComponent":"../node_modules/react-fela/es/FelaComponent.js","./FelaTheme":"../node_modules/react-fela/es/FelaTheme.js","./RendererProvider":"../node_modules/react-fela/es/RendererProvider.js","./ThemeProvider":"../node_modules/react-fela/es/ThemeProvider.js","./useFela":"../node_modules/react-fela/es/useFela.js","./withTheme":"../node_modules/react-fela/es/withTheme.js","./renderToNodeList":"../node_modules/react-fela/es/renderToNodeList.js","./fe":"../node_modules/react-fela/es/fe.js","./context":"../node_modules/react-fela/es/context.js"}],"utils/getId.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var ID = 0;
+
+var getId = function getId() {
+  ID += 1;
+  return ID;
+};
+
+var _default = getId;
+exports.default = _default;
+},{}],"../node_modules/react-draggable/build/web/react-draggable.min.js":[function(require,module,exports) {
+var define;
+/*! For license information please see react-draggable.min.js.LICENSE.txt */
+!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e(require("react-dom"),require("react")):"function"==typeof define&&define.amd?define(["react-dom","react"],e):"object"==typeof exports?exports.ReactDraggable=e(require("react-dom"),require("react")):t.ReactDraggable=e(t.ReactDOM,t.React)}(window,(function(t,e){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=4)}([function(t,e,n){t.exports=n(5)()},function(e,n){e.exports=t},function(t,n){t.exports=e},function(t,e,n){var r;!function(){"use strict";var n={}.hasOwnProperty;function o(){for(var t=[],e=0;e<arguments.length;e++){var r=arguments[e];if(r){var a=typeof r;if("string"===a||"number"===a)t.push(r);else if(Array.isArray(r)&&r.length){var i=o.apply(null,r);i&&t.push(i)}else if("object"===a)for(var u in r)n.call(r,u)&&r[u]&&t.push(u)}}return t.join(" ")}t.exports?(o.default=o,t.exports=o):void 0===(r=function(){return o}.apply(e,[]))||(t.exports=r)}()},function(t,e,n){var r=n(7),o=r.default,a=r.DraggableCore;t.exports=o,t.exports.default=o,t.exports.DraggableCore=a},function(t,e,n){"use strict";var r=n(6);function o(){}function a(){}a.resetWarningCache=o,t.exports=function(){function t(t,e,n,o,a,i){if(i!==r){var u=new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");throw u.name="Invariant Violation",u}}function e(){return t}t.isRequired=t;var n={array:t,bool:t,func:t,number:t,object:t,string:t,symbol:t,any:t,arrayOf:e,element:t,elementType:t,instanceOf:e,node:t,objectOf:e,oneOf:e,oneOfType:e,shape:e,exact:e,checkPropTypes:a,resetWarningCache:o};return n.PropTypes=n,n}},function(t,e,n){"use strict";t.exports="SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED"},function(t,e,n){"use strict";n.r(e),n.d(e,"default",(function(){return mt})),n.d(e,"DraggableCore",(function(){return nt}));var r=n(2),o=n.n(r),a=n(0),i=n.n(a),u=n(1),s=n.n(u),c=n(3),l=n.n(c);function f(t,e){for(var n=0,r=t.length;n<r;n++)if(e.apply(e,[t[n],n,t]))return t[n]}function p(t){return"function"==typeof t||"[object Function]"===Object.prototype.toString.call(t)}function d(t){return"number"==typeof t&&!isNaN(t)}function y(t){return parseInt(t,10)}function g(t,e,n){if(t[e])return new Error("Invalid prop ".concat(e," passed to ").concat(n," - do not set this, set it on the child."))}var h=["Moz","Webkit","O","ms"];function b(t,e){return e?"".concat(e).concat(function(t){for(var e="",n=!0,r=0;r<t.length;r++)n?(e+=t[r].toUpperCase(),n=!1):"-"===t[r]?n=!0:e+=t[r];return e}(t)):t}var m=function(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"transform";if("undefined"==typeof window||void 0===window.document)return"";var e=window.document.documentElement.style;if(t in e)return"";for(var n=0;n<h.length;n++)if(b(t,h[n])in e)return h[n];return""}();function v(t,e){var n=Object.keys(t);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(t);e&&(r=r.filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),n.push.apply(n,r)}return n}function w(t){for(var e=1;e<arguments.length;e++){var n=null!=arguments[e]?arguments[e]:{};e%2?v(Object(n),!0).forEach((function(e){O(t,e,n[e])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(n)):v(Object(n)).forEach((function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(n,e))}))}return t}function O(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}var S="";function D(t,e){return S||(S=f(["matches","webkitMatchesSelector","mozMatchesSelector","msMatchesSelector","oMatchesSelector"],(function(e){return p(t[e])}))),!!p(t[S])&&t[S](e)}function x(t,e,n){var r=t;do{if(D(r,e))return!0;if(r===n)return!1;r=r.parentNode}while(r);return!1}function j(t,e,n,r){if(t){var o=w({capture:!0},r);t.addEventListener?t.addEventListener(e,n,o):t.attachEvent?t.attachEvent("on"+e,n):t["on"+e]=n}}function P(t,e,n,r){if(t){var o=w({capture:!0},r);t.removeEventListener?t.removeEventListener(e,n,o):t.detachEvent?t.detachEvent("on"+e,n):t["on"+e]=null}}function E(t){var e=t.clientHeight,n=t.ownerDocument.defaultView.getComputedStyle(t);return e+=y(n.borderTopWidth),e+=y(n.borderBottomWidth)}function T(t){var e=t.clientWidth,n=t.ownerDocument.defaultView.getComputedStyle(t);return e+=y(n.borderLeftWidth),e+=y(n.borderRightWidth)}function N(t){var e=t.clientHeight,n=t.ownerDocument.defaultView.getComputedStyle(t);return e-=y(n.paddingTop),e-=y(n.paddingBottom)}function C(t){var e=t.clientWidth,n=t.ownerDocument.defaultView.getComputedStyle(t);return e-=y(n.paddingLeft),e-=y(n.paddingRight)}function M(t,e,n){var r=t.x,o=t.y,a="translate(".concat(r).concat(n,",").concat(o).concat(n,")");if(e){var i="".concat("string"==typeof e.x?e.x:e.x+n),u="".concat("string"==typeof e.y?e.y:e.y+n);a="translate(".concat(i,", ").concat(u,")")+a}return a}function k(t){return t.targetTouches&&t.targetTouches[0]?t.targetTouches[0].identifier:t.changedTouches&&t.changedTouches[0]?t.changedTouches[0].identifier:void 0}function _(t){if(t){var e,n,r=t.getElementById("react-draggable-style-el");r||((r=t.createElement("style")).type="text/css",r.id="react-draggable-style-el",r.innerHTML=".react-draggable-transparent-selection *::-moz-selection {all: inherit;}\n",r.innerHTML+=".react-draggable-transparent-selection *::selection {all: inherit;}\n",t.getElementsByTagName("head")[0].appendChild(r)),t.body&&(e=t.body,n="react-draggable-transparent-selection",e.classList?e.classList.add(n):e.className.match(new RegExp("(?:^|\\s)".concat(n,"(?!\\S)")))||(e.className+=" ".concat(n)))}}function R(t){var e,n;if(t)try{if(t.body&&(e=t.body,n="react-draggable-transparent-selection",e.classList?e.classList.remove(n):e.className=e.className.replace(new RegExp("(?:^|\\s)".concat(n,"(?!\\S)"),"g"),"")),t.selection)t.selection.empty();else{var r=(t.defaultView||window).getSelection();r&&"Caret"!==r.type&&r.removeAllRanges()}}catch(t){}}function X(t,e,n){return[Math.round(e/t[0])*t[0],Math.round(n/t[1])*t[1]]}function Y(t){return"both"===t.props.axis||"x"===t.props.axis}function A(t){return"both"===t.props.axis||"y"===t.props.axis}function L(t,e,n){var r="number"==typeof e?function(t,e){return t.targetTouches&&f(t.targetTouches,(function(t){return e===t.identifier}))||t.changedTouches&&f(t.changedTouches,(function(t){return e===t.identifier}))}(t,e):null;if("number"==typeof e&&!r)return null;var o=V(n);return function(t,e,n){var r=e===e.ownerDocument.body?{left:0,top:0}:e.getBoundingClientRect();return{x:(t.clientX+e.scrollLeft-r.left)/n,y:(t.clientY+e.scrollTop-r.top)/n}}(r||t,n.props.offsetParent||o.offsetParent||o.ownerDocument.body,n.props.scale)}function I(t,e,n){var r=t.state,o=!d(r.lastX),a=V(t);return o?{node:a,deltaX:0,deltaY:0,lastX:e,lastY:n,x:e,y:n}:{node:a,deltaX:e-r.lastX,deltaY:n-r.lastY,lastX:r.lastX,lastY:r.lastY,x:e,y:n}}function U(t,e){var n=t.props.scale;return{node:e.node,x:t.state.x+e.deltaX/n,y:t.state.y+e.deltaY/n,deltaX:e.deltaX/n,deltaY:e.deltaY/n,lastX:t.state.x,lastY:t.state.y}}function V(t){var e=s.a.findDOMNode(t);if(!e)throw new Error("<DraggableCore>: Unmounted during event!");return e}function W(t){return(W="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function B(t,e){return function(t){if(Array.isArray(t))return t}(t)||function(t,e){if("undefined"==typeof Symbol||!(Symbol.iterator in Object(t)))return;var n=[],r=!0,o=!1,a=void 0;try{for(var i,u=t[Symbol.iterator]();!(r=(i=u.next()).done)&&(n.push(i.value),!e||n.length!==e);r=!0);}catch(t){o=!0,a=t}finally{try{r||null==u.return||u.return()}finally{if(o)throw a}}return n}(t,e)||function(t,e){if(!t)return;if("string"==typeof t)return H(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);"Object"===n&&t.constructor&&(n=t.constructor.name);if("Map"===n||"Set"===n)return Array.from(n);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return H(t,e)}(t,e)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function H(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function q(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function G(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}function z(t,e){return!e||"object"!==W(e)&&"function"!=typeof e?F(t):e}function F(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}function $(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(t){return!1}}function J(t){return(J=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function K(t,e){return(K=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}function Q(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}var Z={start:"touchstart",move:"touchmove",stop:"touchend"},tt={start:"mousedown",move:"mousemove",stop:"mouseup"},et=tt,nt=function(t){!function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&K(t,e)}(u,t);var e,n,r,a,i=(e=u,function(){var t,n=J(e);if($()){var r=J(this).constructor;t=Reflect.construct(n,arguments,r)}else t=n.apply(this,arguments);return z(this,t)});function u(){var t;q(this,u);for(var e=arguments.length,n=new Array(e),r=0;r<e;r++)n[r]=arguments[r];return Q(F(t=i.call.apply(i,[this].concat(n))),"state",{dragging:!1,lastX:NaN,lastY:NaN,touchIdentifier:null}),Q(F(t),"mounted",!1),Q(F(t),"handleDragStart",(function(e){if(t.props.onMouseDown(e),!t.props.allowAnyClick&&"number"==typeof e.button&&0!==e.button)return!1;var n=s.a.findDOMNode(F(t));if(!n||!n.ownerDocument||!n.ownerDocument.body)throw new Error("<DraggableCore> not mounted on DragStart!");var r=n.ownerDocument;if(!(t.props.disabled||!(e.target instanceof r.defaultView.Node)||t.props.handle&&!x(e.target,t.props.handle,n)||t.props.cancel&&x(e.target,t.props.cancel,n))){"touchstart"===e.type&&e.preventDefault();var o=k(e);t.setState({touchIdentifier:o});var a=L(e,o,F(t));if(null!=a){var i=a.x,u=a.y,c=I(F(t),i,u);t.props.onStart,!1!==t.props.onStart(e,c)&&!1!==t.mounted&&(t.props.enableUserSelectHack&&_(r),t.setState({dragging:!0,lastX:i,lastY:u}),j(r,et.move,t.handleDrag),j(r,et.stop,t.handleDragStop))}}})),Q(F(t),"handleDrag",(function(e){var n=L(e,t.state.touchIdentifier,F(t));if(null!=n){var r=n.x,o=n.y;if(Array.isArray(t.props.grid)){var a=r-t.state.lastX,i=o-t.state.lastY,u=B(X(t.props.grid,a,i),2);if(a=u[0],i=u[1],!a&&!i)return;r=t.state.lastX+a,o=t.state.lastY+i}var s=I(F(t),r,o);if(!1!==t.props.onDrag(e,s)&&!1!==t.mounted)t.setState({lastX:r,lastY:o});else try{t.handleDragStop(new MouseEvent("mouseup"))}catch(e){var c=document.createEvent("MouseEvents");c.initMouseEvent("mouseup",!0,!0,window,0,0,0,0,0,!1,!1,!1,!1,0,null),t.handleDragStop(c)}}})),Q(F(t),"handleDragStop",(function(e){if(t.state.dragging){var n=L(e,t.state.touchIdentifier,F(t));if(null!=n){var r=n.x,o=n.y,a=I(F(t),r,o);if(!1===t.props.onStop(e,a)||!1===t.mounted)return!1;var i=s.a.findDOMNode(F(t));i&&t.props.enableUserSelectHack&&R(i.ownerDocument),t.setState({dragging:!1,lastX:NaN,lastY:NaN}),i&&(P(i.ownerDocument,et.move,t.handleDrag),P(i.ownerDocument,et.stop,t.handleDragStop))}}})),Q(F(t),"onMouseDown",(function(e){return et=tt,t.handleDragStart(e)})),Q(F(t),"onMouseUp",(function(e){return et=tt,t.handleDragStop(e)})),Q(F(t),"onTouchStart",(function(e){return et=Z,t.handleDragStart(e)})),Q(F(t),"onTouchEnd",(function(e){return et=Z,t.handleDragStop(e)})),t}return n=u,(r=[{key:"componentDidMount",value:function(){this.mounted=!0;var t=s.a.findDOMNode(this);t&&j(t,Z.start,this.onTouchStart,{passive:!1})}},{key:"componentWillUnmount",value:function(){this.mounted=!1;var t=s.a.findDOMNode(this);if(t){var e=t.ownerDocument;P(e,tt.move,this.handleDrag),P(e,Z.move,this.handleDrag),P(e,tt.stop,this.handleDragStop),P(e,Z.stop,this.handleDragStop),P(t,Z.start,this.onTouchStart,{passive:!1}),this.props.enableUserSelectHack&&R(e)}}},{key:"render",value:function(){return o.a.cloneElement(o.a.Children.only(this.props.children),{onMouseDown:this.onMouseDown,onMouseUp:this.onMouseUp,onTouchEnd:this.onTouchEnd})}}])&&G(n.prototype,r),a&&G(n,a),u}(o.a.Component);function rt(t){return(rt="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}function ot(){return(ot=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])}return t}).apply(this,arguments)}function at(t,e){if(null==t)return{};var n,r,o=function(t,e){if(null==t)return{};var n,r,o={},a=Object.keys(t);for(r=0;r<a.length;r++)n=a[r],e.indexOf(n)>=0||(o[n]=t[n]);return o}(t,e);if(Object.getOwnPropertySymbols){var a=Object.getOwnPropertySymbols(t);for(r=0;r<a.length;r++)n=a[r],e.indexOf(n)>=0||Object.prototype.propertyIsEnumerable.call(t,n)&&(o[n]=t[n])}return o}function it(t,e){return function(t){if(Array.isArray(t))return t}(t)||function(t,e){if("undefined"==typeof Symbol||!(Symbol.iterator in Object(t)))return;var n=[],r=!0,o=!1,a=void 0;try{for(var i,u=t[Symbol.iterator]();!(r=(i=u.next()).done)&&(n.push(i.value),!e||n.length!==e);r=!0);}catch(t){o=!0,a=t}finally{try{r||null==u.return||u.return()}finally{if(o)throw a}}return n}(t,e)||function(t,e){if(!t)return;if("string"==typeof t)return ut(t,e);var n=Object.prototype.toString.call(t).slice(8,-1);"Object"===n&&t.constructor&&(n=t.constructor.name);if("Map"===n||"Set"===n)return Array.from(n);if("Arguments"===n||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return ut(t,e)}(t,e)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function ut(t,e){(null==e||e>t.length)&&(e=t.length);for(var n=0,r=new Array(e);n<e;n++)r[n]=t[n];return r}function st(t,e){var n=Object.keys(t);if(Object.getOwnPropertySymbols){var r=Object.getOwnPropertySymbols(t);e&&(r=r.filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),n.push.apply(n,r)}return n}function ct(t){for(var e=1;e<arguments.length;e++){var n=null!=arguments[e]?arguments[e]:{};e%2?st(Object(n),!0).forEach((function(e){bt(t,e,n[e])})):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(n)):st(Object(n)).forEach((function(e){Object.defineProperty(t,e,Object.getOwnPropertyDescriptor(n,e))}))}return t}function lt(t,e){for(var n=0;n<e.length;n++){var r=e[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}function ft(t,e,n){return e&&lt(t.prototype,e),n&&lt(t,n),t}function pt(t,e){return!e||"object"!==rt(e)&&"function"!=typeof e?dt(t):e}function dt(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}function yt(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(t){return!1}}function gt(t){return(gt=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function ht(t,e){return(ht=Object.setPrototypeOf||function(t,e){return t.__proto__=e,t})(t,e)}function bt(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}Q(nt,"displayName","DraggableCore"),Q(nt,"propTypes",{allowAnyClick:i.a.bool,disabled:i.a.bool,enableUserSelectHack:i.a.bool,offsetParent:function(t,e){if(t[e]&&1!==t[e].nodeType)throw new Error("Draggable's offsetParent must be a DOM Node.")},grid:i.a.arrayOf(i.a.number),handle:i.a.string,cancel:i.a.string,onStart:i.a.func,onDrag:i.a.func,onStop:i.a.func,onMouseDown:i.a.func,scale:i.a.number,className:g,style:g,transform:g}),Q(nt,"defaultProps",{allowAnyClick:!1,cancel:null,disabled:!1,enableUserSelectHack:!0,offsetParent:null,handle:null,grid:null,transform:null,onStart:function(){},onDrag:function(){},onStop:function(){},onMouseDown:function(){},scale:1});var mt=function(t){!function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),e&&ht(t,e)}(r,t);var e,n=(e=r,function(){var t,n=gt(e);if(yt()){var r=gt(this).constructor;t=Reflect.construct(n,arguments,r)}else t=n.apply(this,arguments);return pt(this,t)});function r(t){var e;return function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,r),bt(dt(e=n.call(this,t)),"onDragStart",(function(t,n){if(!1===e.props.onStart(t,U(dt(e),n)))return!1;e.setState({dragging:!0,dragged:!0})})),bt(dt(e),"onDrag",(function(t,n){if(!e.state.dragging)return!1;var r=U(dt(e),n),o={x:r.x,y:r.y};if(e.props.bounds){var a=o.x,i=o.y;o.x+=e.state.slackX,o.y+=e.state.slackY;var u=it(function(t,e,n){if(!t.props.bounds)return[e,n];var r=t.props.bounds;r="string"==typeof r?r:function(t){return{left:t.left,top:t.top,right:t.right,bottom:t.bottom}}(r);var o=V(t);if("string"==typeof r){var a,i=o.ownerDocument,u=i.defaultView;if(!((a="parent"===r?o.parentNode:i.querySelector(r))instanceof u.HTMLElement))throw new Error('Bounds selector "'+r+'" could not find an element.');var s=u.getComputedStyle(o),c=u.getComputedStyle(a);r={left:-o.offsetLeft+y(c.paddingLeft)+y(s.marginLeft),top:-o.offsetTop+y(c.paddingTop)+y(s.marginTop),right:C(a)-T(o)-o.offsetLeft+y(c.paddingRight)-y(s.marginRight),bottom:N(a)-E(o)-o.offsetTop+y(c.paddingBottom)-y(s.marginBottom)}}return d(r.right)&&(e=Math.min(e,r.right)),d(r.bottom)&&(n=Math.min(n,r.bottom)),d(r.left)&&(e=Math.max(e,r.left)),d(r.top)&&(n=Math.max(n,r.top)),[e,n]}(dt(e),o.x,o.y),2),s=u[0],c=u[1];o.x=s,o.y=c,o.slackX=e.state.slackX+(a-o.x),o.slackY=e.state.slackY+(i-o.y),r.x=o.x,r.y=o.y,r.deltaX=o.x-e.state.x,r.deltaY=o.y-e.state.y}if(!1===e.props.onDrag(t,r))return!1;e.setState(o)})),bt(dt(e),"onDragStop",(function(t,n){if(!e.state.dragging)return!1;if(!1===e.props.onStop(t,U(dt(e),n)))return!1;var r={dragging:!1,slackX:0,slackY:0};if(Boolean(e.props.position)){var o=e.props.position,a=o.x,i=o.y;r.x=a,r.y=i}e.setState(r)})),e.state={dragging:!1,dragged:!1,x:t.position?t.position.x:t.defaultPosition.x,y:t.position?t.position.y:t.defaultPosition.y,prevPropsPosition:ct({},t.position),slackX:0,slackY:0,isElementSVG:!1},!t.position||t.onDrag||t.onStop||console.warn("A `position` was applied to this <Draggable>, without drag handlers. This will make this component effectively undraggable. Please attach `onDrag` or `onStop` handlers so you can adjust the `position` of this element."),e}return ft(r,null,[{key:"getDerivedStateFromProps",value:function(t,e){var n=t.position,r=e.prevPropsPosition;return!n||r&&n.x===r.x&&n.y===r.y?null:{x:n.x,y:n.y,prevPropsPosition:ct({},n)}}}]),ft(r,[{key:"componentDidMount",value:function(){void 0!==window.SVGElement&&s.a.findDOMNode(this)instanceof window.SVGElement&&this.setState({isElementSVG:!0})}},{key:"componentWillUnmount",value:function(){this.setState({dragging:!1})}},{key:"render",value:function(){var t,e=this.props,n=(e.axis,e.bounds,e.children),r=e.defaultPosition,a=e.defaultClassName,i=e.defaultClassNameDragging,u=e.defaultClassNameDragged,s=e.position,c=e.positionOffset,f=(e.scale,at(e,["axis","bounds","children","defaultPosition","defaultClassName","defaultClassNameDragging","defaultClassNameDragged","position","positionOffset","scale"])),p={},d=null,y=!Boolean(s)||this.state.dragging,g=s||r,h={x:Y(this)&&y?this.state.x:g.x,y:A(this)&&y?this.state.y:g.y};this.state.isElementSVG?d=function(t,e){return M(t,e,"")}(h,c):p=function(t,e){var n=M(t,e,"px");return O({},b("transform",m),n)}(h,c);var v=l()(n.props.className||"",a,(bt(t={},i,this.state.dragging),bt(t,u,this.state.dragged),t));return o.a.createElement(nt,ot({},f,{onStart:this.onDragStart,onDrag:this.onDrag,onStop:this.onDragStop}),o.a.cloneElement(o.a.Children.only(n),{className:v,style:ct({},n.props.style,{},p),transform:d}))}}]),r}(o.a.Component);bt(mt,"displayName","Draggable"),bt(mt,"propTypes",ct({},nt.propTypes,{axis:i.a.oneOf(["both","x","y","none"]),bounds:i.a.oneOfType([i.a.shape({left:i.a.number,right:i.a.number,top:i.a.number,bottom:i.a.number}),i.a.string,i.a.oneOf([!1])]),defaultClassName:i.a.string,defaultClassNameDragging:i.a.string,defaultClassNameDragged:i.a.string,defaultPosition:i.a.shape({x:i.a.number,y:i.a.number}),positionOffset:i.a.shape({x:i.a.oneOfType([i.a.number,i.a.string]),y:i.a.oneOfType([i.a.number,i.a.string])}),position:i.a.shape({x:i.a.number,y:i.a.number}),className:g,style:g,transform:g})),bt(mt,"defaultProps",ct({},nt.defaultProps,{axis:"both",bounds:!1,defaultClassName:"react-draggable",defaultClassNameDragging:"react-draggable-dragging",defaultClassNameDragged:"react-draggable-dragged",defaultPosition:{x:0,y:0},position:null,scale:1}))}])}));
+
+},{"react-dom":"../node_modules/react-dom/index.js","react":"../node_modules/react/index.js"}],"components/Toolbar/components/TextAreaButton/Textarea/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactFela = require("react-fela");
+
+var _reactDraggable = _interopRequireDefault(require("react-draggable"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var StyledTextArea = (0, _reactFela.createComponent)(function () {
+  return {
+    position: 'absolute',
+    height: '60px',
+    maxHeight: '500px',
+    margin: '50px',
+    padding: '8px',
+    background: 'transparent',
+    fontSize: '22px',
+    border: '1px solid transparent',
+    resize: 'none',
+    cursor: 'grab',
+    ':focus': {
+      border: '1px solid black',
+      cursor: 'text'
+    }
+  };
+}, 'textarea', ['autoFocus', 'onInput', 'placeholder', 'onKeyDown']);
+
+var TextArea = function TextArea(_ref) {
+  var removeElement = _ref.removeElement;
+
+  var onInput = function onInput(_ref2) {
+    var target = _ref2.target;
+    target.style.height = "inherit"; // eslint-disable-line
+
+    var height = parseInt(target.scrollHeight, 10) - 8;
+    target.style.height = "".concat(height, "px"); // eslint-disable-line
+  };
+
+  var onKeyDown = function onKeyDown(e) {
+    // 8 === delete key
+    if (e.keyCode === 8 && e.target.value === '') {
+      removeElement();
+    }
+  };
+
+  return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, {
+    handle: ".handle"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "handle",
+    style: {
+      display: 'inline-flex'
+    }
+  }, /*#__PURE__*/_react.default.createElement(StyledTextArea, {
+    autoFocus: true,
+    placeholder: "Type here...",
+    onInput: onInput,
+    onKeyDown: onKeyDown
+  })));
+};
+
+TextArea.propTypes = {
+  removeElement: _propTypes.default.func.isRequired
+};
+var _default = TextArea;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-fela":"../node_modules/react-fela/es/index.js","react-draggable":"../node_modules/react-draggable/build/web/react-draggable.min.js"}],"assets/text.svg":[function(require,module,exports) {
 module.exports = "/text.e016ac46.svg";
 },{}],"components/Toolbar/components/Button/index.js":[function(require,module,exports) {
 "use strict";
@@ -33677,15 +33773,21 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _Textarea = _interopRequireDefault(require("./Textarea"));
+
 var _text = _interopRequireDefault(require("../../../../assets/text.svg"));
 
 var _Button = _interopRequireDefault(require("../Button"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var TextAreaButton = function TextAreaButton() {
-  var onClick = function onClick(e) {
-    console.log('Click', e);
+var TextAreaButton = function TextAreaButton(_ref) {
+  var addElement = _ref.addElement;
+
+  var onClick = function onClick() {
+    addElement(_Textarea.default);
   };
 
   return /*#__PURE__*/_react.default.createElement(_Button.default, {
@@ -33699,9 +33801,12 @@ var TextAreaButton = function TextAreaButton() {
 };
 
 TextAreaButton.displayName = 'TextAreaButton';
+TextAreaButton.propTypes = {
+  addElement: _propTypes.default.func.isRequired
+};
 var _default = TextAreaButton;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../../../../assets/text.svg":"assets/text.svg","../Button":"components/Toolbar/components/Button/index.js"}],"assets/sqroot.svg":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./Textarea":"components/Toolbar/components/TextAreaButton/Textarea/index.js","../../../../assets/text.svg":"assets/text.svg","../Button":"components/Toolbar/components/Button/index.js"}],"assets/sqroot.svg":[function(require,module,exports) {
 module.exports = "/sqroot.242bf77d.svg";
 },{}],"components/Toolbar/components/EquationAreaButton/index.js":[function(require,module,exports) {
 "use strict";
@@ -33747,6 +33852,8 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _reactFela = require("react-fela");
 
 var _TextAreaButton = _interopRequireDefault(require("./components/TextAreaButton"));
@@ -33759,35 +33866,40 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var BUTTONS = [_TextAreaButton.default, _EquationAreaButton.default];
 var StyledToolbar = (0, _reactFela.createComponent)(function () {
   return {
     position: 'fixed',
     top: '50%',
+    left: '0',
     transform: 'translateY(-50%)',
+    display: 'flex',
+    flexDirection: 'column',
     border: '1px solid rgb(189, 195, 199, 0.7)',
     borderRadius: '5px',
     background: 'rgb(253, 254, 254, 0.7)',
     padding: '0.5rem',
-    left: '0',
     marginTop: '-16px'
   };
 }, 'div');
 
-var Toolbar = function Toolbar() {
+var Toolbar = function Toolbar(_ref) {
+  var addElement = _ref.addElement;
   var toolbarRef = (0, _react.useRef)(null);
   return /*#__PURE__*/_react.default.createElement(StyledToolbar, {
     innerRef: toolbarRef
-  }, BUTTONS.map(function (Button) {
-    return /*#__PURE__*/_react.default.createElement("div", {
-      key: Button.displayName
-    }, /*#__PURE__*/_react.default.createElement(Button, null));
+  }, /*#__PURE__*/_react.default.createElement(_TextAreaButton.default, {
+    addElement: addElement
+  }), /*#__PURE__*/_react.default.createElement(_EquationAreaButton.default, {
+    addElement: addElement
   }));
 };
 
+Toolbar.propTypes = {
+  addElement: _propTypes.default.func.isRequired
+};
 var _default = Toolbar;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-fela":"../node_modules/react-fela/es/index.js","./components/TextAreaButton":"components/Toolbar/components/TextAreaButton/index.js","./components/EquationAreaButton":"components/Toolbar/components/EquationAreaButton/index.js"}],"utils/canvas/drawLine.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-fela":"../node_modules/react-fela/es/index.js","./components/TextAreaButton":"components/Toolbar/components/TextAreaButton/index.js","./components/EquationAreaButton":"components/Toolbar/components/EquationAreaButton/index.js"}],"utils/canvas/drawLine.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33850,7 +33962,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TOP_PADDING = exports.AXIS_TICK_SIZE = exports.AXIS_NUM_PADDING = exports.AXIS_LABEL_PADDING_FROM_AXIS = exports.AXIS_LABEL_PADDING_FROM_END = exports.AXIS_LINE_WIDTH = exports.GRID_LINE_WIDTH = void 0;
+exports.PADDING = exports.AXIS_TICK_SIZE = exports.AXIS_NUM_PADDING = exports.AXIS_LABEL_PADDING_FROM_AXIS = exports.AXIS_LABEL_PADDING_FROM_END = exports.AXIS_LINE_WIDTH = exports.GRID_LINE_WIDTH = void 0;
 var GRID_LINE_WIDTH = 0.3;
 exports.GRID_LINE_WIDTH = GRID_LINE_WIDTH;
 var AXIS_LINE_WIDTH = 1.5;
@@ -33863,8 +33975,8 @@ var AXIS_NUM_PADDING = 7;
 exports.AXIS_NUM_PADDING = AXIS_NUM_PADDING;
 var AXIS_TICK_SIZE = 5;
 exports.AXIS_TICK_SIZE = AXIS_TICK_SIZE;
-var TOP_PADDING = 12;
-exports.TOP_PADDING = TOP_PADDING;
+var PADDING = 12;
+exports.PADDING = PADDING;
 },{}],"components/Grid/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -33909,6 +34021,8 @@ var Grid = function Grid(_ref) {
         height = _canvas$getBoundingCl.height,
         width = _canvas$getBoundingCl.width;
 
+    height -= _styleConstants.PADDING * 2;
+    width -= _styleConstants.PADDING * 2;
     var maxCanvasSize = Math.min(height, width); // Grid lines
 
     var increment = maxCanvasSize / (size * 2);
@@ -33918,11 +34032,12 @@ var Grid = function Grid(_ref) {
 
       if (Math.floor(point) === Math.floor(maxCanvasSize / 2)) {
         context.lineWidth = _styleConstants.AXIS_LINE_WIDTH;
-      }
+      } // horizontal lines
 
-      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2, point + _styleConstants.TOP_PADDING, width / 2 + maxCanvasSize / 2, point + _styleConstants.TOP_PADDING); // horizontal lines
 
-      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2 + _styleConstants.TOP_PADDING, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2 + _styleConstants.TOP_PADDING); // vertical lines
+      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2, point + _styleConstants.PADDING, width / 2 + maxCanvasSize / 2, point + _styleConstants.PADDING); // vertical lines
+
+      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2 + _styleConstants.PADDING, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2 + _styleConstants.PADDING); // vertical lines
     } // X axis label
 
 
@@ -33932,7 +34047,7 @@ var Grid = function Grid(_ref) {
 
     context.font = 'normal 16px sans-serif';
     context.textBaseline = 'middle';
-    context.fillText('Y', width / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END - 8, height / 2 - maxCanvasSize / 2 + _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS + _styleConstants.TOP_PADDING); // X axis ticks and labels
+    context.fillText('Y', width / 2 - _styleConstants.AXIS_LABEL_PADDING_FROM_END - 8, height / 2 - maxCanvasSize / 2 + _styleConstants.AXIS_LABEL_PADDING_FROM_AXIS + _styleConstants.PADDING); // X axis ticks and labels
 
     context.font = 'normal 14px sans-serif';
     context.textAlign = 'center';
@@ -33940,9 +34055,9 @@ var Grid = function Grid(_ref) {
 
     for (var x = 0; x <= size * 2; x += 1) {
       if (x - size !== 0) {
-        context.fillText("".concat(x - size), width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_NUM_PADDING + _styleConstants.TOP_PADDING);
+        context.fillText("".concat(x - size), width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_NUM_PADDING + _styleConstants.PADDING);
         context.lineWidth = 1.5;
-        (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 - _styleConstants.AXIS_TICK_SIZE + _styleConstants.TOP_PADDING, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_TICK_SIZE + _styleConstants.TOP_PADDING);
+        (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 - _styleConstants.AXIS_TICK_SIZE + _styleConstants.PADDING, width / 2 - maxCanvasSize / 2 + x * increment, height / 2 + _styleConstants.AXIS_TICK_SIZE + _styleConstants.PADDING);
       }
     } // Y axis ticks and labels
 
@@ -33953,9 +34068,9 @@ var Grid = function Grid(_ref) {
 
     for (var y = 0; y <= size * 2; y += 1) {
       if (y - size !== 0) {
-        context.fillText("".concat(size - y), width / 2 + _styleConstants.AXIS_NUM_PADDING, y * increment + _styleConstants.TOP_PADDING);
+        context.fillText("".concat(size - y), width / 2 + _styleConstants.AXIS_NUM_PADDING, y * increment + _styleConstants.PADDING);
         context.lineWidth = 1.5;
-        (0, _canvas.drawLine)(context, width / 2 - _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.TOP_PADDING, width / 2 + _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.TOP_PADDING);
+        (0, _canvas.drawLine)(context, width / 2 - _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.PADDING, width / 2 + _styleConstants.AXIS_TICK_SIZE, y * increment + _styleConstants.PADDING);
       }
     }
   }, [size]);
@@ -33983,6 +34098,8 @@ var _reactFela = require("react-fela");
 
 var _Grid = _interopRequireDefault(require("../Grid"));
 
+var _styleConstants = require("../Grid/styleConstants");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
@@ -34009,13 +34126,21 @@ var ScrollTrapContainer = (0, _reactFela.createComponent)(function () {
     width: '100%',
     height: '100%',
     maxHeight: '100%',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    zIndex: '-1'
   };
 }, 'div', ['onScroll']);
 var ScrollTrap = (0, _reactFela.createComponent)(function () {
   return {
     width: '100%',
     height: "calc(100% * ".concat(MAX_NUM_COLUMNS + 1, ")")
+  };
+}, 'div');
+var StyledGridContainer = (0, _reactFela.createComponent)(function () {
+  return {
+    position: 'absolute',
+    padding: "".concat(_styleConstants.PADDING, "px"),
+    zIndex: '-2'
   };
 }, 'div');
 
@@ -34044,18 +34169,90 @@ var GridContainer = function GridContainer() {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(ScrollTrapContainer, {
     innerRef: scrollTrapRef,
     onScroll: onScroll
-  }, /*#__PURE__*/_react.default.createElement(ScrollTrap, null)), /*#__PURE__*/_react.default.createElement(_Grid.default, {
+  }, /*#__PURE__*/_react.default.createElement(ScrollTrap, null)), /*#__PURE__*/_react.default.createElement(StyledGridContainer, null, /*#__PURE__*/_react.default.createElement(_Grid.default, {
     onScroll: onScroll,
     size: size
-  }));
+  })));
 };
 
 var _default = GridContainer;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-fela":"../node_modules/react-fela/es/index.js","../Grid":"components/Grid/index.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-fela":"../node_modules/react-fela/es/index.js","../Grid":"components/Grid/index.js","../Grid/styleConstants":"components/Grid/styleConstants.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactDom = require("react-dom");
 
@@ -34063,26 +34260,76 @@ var _reactFela = require("react-fela");
 
 var _fela = require("fela");
 
+var _getId = _interopRequireDefault(require("./utils/getId"));
+
 var _Toolbar = _interopRequireDefault(require("./components/Toolbar"));
 
 var _GridContainer = _interopRequireDefault(require("./components/GridContainer"));
 
+require("./styles.css");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var renderer = (0, _fela.createRenderer)();
+var StyledApp = (0, _reactFela.createComponent)(function () {
+  return {};
+}, 'div');
 
 var App = function App() {
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      elements = _useState2[0],
+      setElements = _useState2[1];
+
+  var addElement = function addElement(element) {
+    var elementEntry = {
+      id: (0, _getId.default)(),
+      Element: element
+    };
+    var newElements = elements.concat(elementEntry);
+    setElements(newElements);
+  };
+
+  var _removeElement = function removeElement(id) {
+    setElements(elements.filter(function (elementEntry) {
+      return elementEntry.id !== id;
+    }));
+  };
+
   return /*#__PURE__*/_react.default.createElement(_reactFela.RendererProvider, {
     renderer: renderer
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    style: {
-      padding: '8px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null)));
+  }, /*#__PURE__*/_react.default.createElement(StyledApp, null, /*#__PURE__*/_react.default.createElement(_Toolbar.default, {
+    addElement: addElement
+  }), /*#__PURE__*/_react.default.createElement(_GridContainer.default, null), elements.map(function (_ref) {
+    var Element = _ref.Element,
+        id = _ref.id;
+    return /*#__PURE__*/_react.default.createElement(Element, {
+      key: id,
+      removeElement: function removeElement() {
+        return _removeElement(id);
+      }
+    });
+  })));
 };
 
 (0, _reactDom.render)( /*#__PURE__*/_react.default.createElement(App, null), document.getElementById('root'));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-fela":"../node_modules/react-fela/es/index.js","fela":"../node_modules/fela/es/index.js","./components/Toolbar":"components/Toolbar/index.js","./components/GridContainer":"components/GridContainer/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-fela":"../node_modules/react-fela/es/index.js","fela":"../node_modules/fela/es/index.js","./utils/getId":"utils/getId.js","./components/Toolbar":"components/Toolbar/index.js","./components/GridContainer":"components/GridContainer/index.js","./styles.css":"styles.css"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
+import Textarea from './Textarea';
 import TextSVG from '../../../../assets/text.svg';
 import Button from '../Button';
 
-const TextAreaButton = () => {
-  const onClick = (e) => {
-    console.log('Click', e);
+const TextAreaButton = ({ addElement }) => {
+  const onClick = () => {
+    addElement(Textarea);
   };
   return (
     <Button onClick={onClick}>
@@ -15,5 +17,9 @@ const TextAreaButton = () => {
 };
 
 TextAreaButton.displayName = 'TextAreaButton';
+
+TextAreaButton.propTypes = {
+  addElement: PropTypes.func.isRequired,
+};
 
 export default TextAreaButton;
