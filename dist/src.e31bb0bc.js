@@ -33654,23 +33654,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var StyledTextArea = (0, _reactFela.createComponent)(function () {
   return {
-    position: "absolute",
-    height: "60px",
-    maxHeight: "500px",
-    margin: "50px",
-    padding: "8px",
-    background: "transparent",
-    fontSize: "22px",
-    border: "1px solid transparent",
-    cursor: "grab",
-    resize: "none",
-    ":focus": {
-      border: "1px solid black",
-      cursor: "text",
-      resize: "auto"
+    position: 'absolute',
+    height: '60px',
+    maxHeight: '500px',
+    margin: '25px',
+    padding: '8px',
+    background: 'transparent',
+    fontSize: '22px',
+    border: '1px solid transparent',
+    cursor: 'grab',
+    resize: 'none',
+    ':focus': {
+      border: '1px solid black',
+      cursor: 'text',
+      resize: 'auto'
     }
   };
-}, "textarea", ["autoFocus", "onInput", "placeholder", "onKeyDown"]);
+}, 'textarea', ['autoFocus', 'onInput', 'placeholder', 'onKeyDown']);
 
 var TextArea = function TextArea(_ref) {
   var removeElement = _ref.removeElement;
@@ -33694,7 +33694,7 @@ var TextArea = function TextArea(_ref) {
 
   var onKeyDown = function onKeyDown(e) {
     // 8 === delete key
-    if (e.keyCode === 8 && e.target.value === "") {
+    if (e.keyCode === 8 && e.target.value === '') {
       removeElement();
     }
   };
@@ -33705,7 +33705,7 @@ var TextArea = function TextArea(_ref) {
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "handle",
     style: {
-      display: "inline-flex"
+      display: 'inline-flex'
     }
   }, /*#__PURE__*/_react.default.createElement(StyledTextArea, {
     autoFocus: true,
@@ -33819,7 +33819,78 @@ var _default = TextAreaButton;
 exports.default = _default;
 },{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./Textarea":"components/Toolbar/components/TextAreaButton/Textarea/index.js","../../../../assets/text.svg":"assets/text.svg","../Button":"components/Toolbar/components/Button/index.js"}],"assets/sqroot.svg":[function(require,module,exports) {
 module.exports = "/sqroot.242bf77d.svg";
-},{}],"components/Toolbar/components/EquationAreaButton/index.js":[function(require,module,exports) {
+},{}],"components/Toolbar/components/EquationAreaButton/EquationArea/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactDraggable = _interopRequireDefault(require("react-draggable"));
+
+var _reactFela = require("react-fela");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var StyledEquationArea = (0, _reactFela.createComponentWithProxy)(function () {
+  return {
+    fontSize: '22px',
+    padding: '16px',
+    borderRadius: '5px'
+  };
+}, 'div');
+var StyledEquationAreaContainer = (0, _reactFela.createComponentWithProxy)(function () {
+  return {
+    position: 'absolute',
+    margin: '25px',
+    padding: '20px',
+    cursor: 'grab'
+  };
+}, 'div');
+
+var EquationArea = function EquationArea(_ref) {
+  var removeElement = _ref.removeElement;
+  var inputRef = (0, _react.useRef)(null);
+  var mq = MathQuill.getInterface(2); // eslint-disable-line
+
+  var onKeyDown = function onKeyDown(e) {
+    if (e.keyCode === 8 && !e.target.parentNode.parentNode.querySelector('.mq-root-block var')) {
+      removeElement();
+    }
+  };
+
+  (0, _react.useEffect)(function () {
+    mq.MathField(inputRef.current, {});
+  }, []);
+  return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, {
+    handle: ".handle"
+  }, /*#__PURE__*/_react.default.createElement(StyledEquationAreaContainer, {
+    className: "handle"
+  }, /*#__PURE__*/_react.default.createElement(StyledEquationArea, {
+    innerRef: inputRef,
+    role: "textbox",
+    onKeyDown: onKeyDown
+  })));
+};
+
+EquationArea.propTypes = {
+  removeElement: _propTypes.default.func
+};
+EquationArea.defaultProps = {
+  removeElement: function removeElement() {}
+};
+var _default = EquationArea;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-draggable":"../node_modules/react-draggable/build/web/react-draggable.min.js","react-fela":"../node_modules/react-fela/es/index.js"}],"components/Toolbar/components/EquationAreaButton/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33829,15 +33900,21 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _sqroot = _interopRequireDefault(require("../../../../assets/sqroot.svg"));
 
 var _Button = _interopRequireDefault(require("../Button"));
 
+var _EquationArea = _interopRequireDefault(require("./EquationArea"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var EquationAreaButton = function EquationAreaButton() {
-  var onClick = function onClick(e) {
-    console.log('Click', e);
+var EquationAreaButton = function EquationAreaButton(_ref) {
+  var addElement = _ref.addElement;
+
+  var onClick = function onClick() {
+    addElement(_EquationArea.default);
   };
 
   return /*#__PURE__*/_react.default.createElement(_Button.default, {
@@ -33851,9 +33928,12 @@ var EquationAreaButton = function EquationAreaButton() {
 };
 
 EquationAreaButton.displayName = 'EquationAreaButton';
+EquationAreaButton.propTypes = {
+  addElement: _propTypes.default.func.isRequired
+};
 var _default = EquationAreaButton;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","../../../../assets/sqroot.svg":"assets/sqroot.svg","../Button":"components/Toolbar/components/Button/index.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../../../assets/sqroot.svg":"assets/sqroot.svg","../Button":"components/Toolbar/components/Button/index.js","./EquationArea":"components/Toolbar/components/EquationAreaButton/EquationArea/index.js"}],"components/Toolbar/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

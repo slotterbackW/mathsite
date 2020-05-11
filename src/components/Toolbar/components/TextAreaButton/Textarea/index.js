@@ -8,7 +8,7 @@ const StyledTextArea = createComponent(
     position: 'absolute',
     height: '60px',
     maxHeight: '500px',
-    margin: '50px',
+    margin: '25px',
     padding: '8px',
     background: 'transparent',
     fontSize: '22px',
