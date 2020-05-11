@@ -13,11 +13,12 @@ const StyledTextArea = createComponent(
     background: 'transparent',
     fontSize: '22px',
     border: '1px solid transparent',
-    resize: 'none',
     cursor: 'grab',
+    resize: 'none',
     ':focus': {
       border: '1px solid black',
       cursor: 'text',
+      resize: 'auto',
     },
   }),
   'textarea',
@@ -31,6 +32,14 @@ const TextArea = ({ removeElement }) => {
     target.style.height = `${height}px`; // eslint-disable-line
   };
 
+  const onStart = (e) => {
+    // Prevent dragging when element is focused
+    if (document.activeElement === e.target) {
+      return false;
+    }
+    return true;
+  };
+
   const onKeyDown = (e) => {
     // 8 === delete key
     if (e.keyCode === 8 && e.target.value === '') {
@@ -39,7 +48,7 @@ const TextArea = ({ removeElement }) => {
   };
 
   return (
-    <Draggable handle=".handle">
+    <Draggable handle=".handle" onStart={onStart}>
       <div className="handle" style={{ display: 'inline-flex' }}>
         <StyledTextArea
           autoFocus

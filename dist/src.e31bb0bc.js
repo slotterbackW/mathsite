@@ -33654,22 +33654,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var StyledTextArea = (0, _reactFela.createComponent)(function () {
   return {
-    position: 'absolute',
-    height: '60px',
-    maxHeight: '500px',
-    margin: '50px',
-    padding: '8px',
-    background: 'transparent',
-    fontSize: '22px',
-    border: '1px solid transparent',
-    resize: 'none',
-    cursor: 'grab',
-    ':focus': {
-      border: '1px solid black',
-      cursor: 'text'
+    position: "absolute",
+    height: "60px",
+    maxHeight: "500px",
+    margin: "50px",
+    padding: "8px",
+    background: "transparent",
+    fontSize: "22px",
+    border: "1px solid transparent",
+    cursor: "grab",
+    resize: "none",
+    ":focus": {
+      border: "1px solid black",
+      cursor: "text",
+      resize: "auto"
     }
   };
-}, 'textarea', ['autoFocus', 'onInput', 'placeholder', 'onKeyDown']);
+}, "textarea", ["autoFocus", "onInput", "placeholder", "onKeyDown"]);
 
 var TextArea = function TextArea(_ref) {
   var removeElement = _ref.removeElement;
@@ -33682,19 +33683,29 @@ var TextArea = function TextArea(_ref) {
     target.style.height = "".concat(height, "px"); // eslint-disable-line
   };
 
+  var onStart = function onStart(e) {
+    // Prevent dragging when element is focused
+    if (document.activeElement === e.target) {
+      return false;
+    }
+
+    return true;
+  };
+
   var onKeyDown = function onKeyDown(e) {
     // 8 === delete key
-    if (e.keyCode === 8 && e.target.value === '') {
+    if (e.keyCode === 8 && e.target.value === "") {
       removeElement();
     }
   };
 
   return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, {
-    handle: ".handle"
+    handle: ".handle",
+    onStart: onStart
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "handle",
     style: {
-      display: 'inline-flex'
+      display: "inline-flex"
     }
   }, /*#__PURE__*/_react.default.createElement(StyledTextArea, {
     autoFocus: true,
@@ -34357,7 +34368,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51875" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59950" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
