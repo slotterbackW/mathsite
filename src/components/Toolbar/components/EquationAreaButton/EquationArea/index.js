@@ -29,7 +29,8 @@ const EquationArea = ({ removeElement }) => {
   const onKeyDown = (e) => {
     if (
       e.keyCode === 8
-      && !e.target.parentNode.parentNode.querySelector('.mq-root-block var')
+      && e.target.parentNode.parentNode.querySelector('.mq-root-block').childNodes
+        .length <= 1
     ) {
       removeElement();
     }

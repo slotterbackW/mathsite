@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SqRootSVG from '../../../../assets/sqroot.svg';
+import MinusSVG from '../../../../assets/minus.svg';
 import Button from '../Button';
 import EquationArea from './EquationArea';
 
@@ -12,7 +12,7 @@ const EquationAreaButton = ({ addElement }) => {
 
   return (
     <Button onClick={onClick}>
-      <img src={SqRootSVG} alt="Formula Button" width="24px" height="24px" />
+      <img src={MinusSVG} alt="Formula Button" width="24px" height="24px" />
     </Button>
   );
 };

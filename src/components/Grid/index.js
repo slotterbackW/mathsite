@@ -1,6 +1,7 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { createComponent } from 'react-fela';
+import { throttle } from 'lodash';
 
 import { drawLine } from '../../utils/canvas';
 
@@ -20,14 +21,68 @@ const GridCanvas = createComponent(
     height: '100%',
   }),
   'canvas',
+  ['tabIndex', 'onClick', 'onWheel', 'onKeyDown'],
 );
 
-const Grid = ({ size }) => {
+const Grid = ({ isDrawing }) => {
+  const [size, setSize] = useState(5);
+  const [ctx, setContext] = useState(null);
+  const [line, setLine] = useState({});
   const canvasRef = useRef(null);
+
+  const throttledSetSize = throttle(
+    (delta) => {
+      setSize(size + delta);
+      setLine({});
+    },
+    75,
+    { leading: false, trailing: true },
+  );
+
+  const handleWheel = throttle(
+    (e) => {
+      let delta;
+      if (e.deltaY === 0) {
+        delta = 0;
+      } else {
+        delta = e.deltaY > 0 ? 1 : -1;
+      }
+
+      if ((delta < 0 && size <= 1) || (delta > 0 && size >= 20)) return;
+      throttledSetSize(delta);
+    },
+    75,
+    {
+      leading: true,
+      trailing: false,
+    },
+  );
+
+  const handleClick = (e) => {
+    if (isDrawing) {
+      const x = e.clientX;
+      const y = e.clientY;
+      if (line.points) {
+        const lastPoint = line.points[line.points.length - 1];
+        drawLine(ctx, lastPoint.x, lastPoint.y, x, y);
+        setLine({ points: line.points.concat([{ x, y }]) });
+      } else {
+        setLine({ points: [{ x, y }] });
+      }
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    // ESCAPE
+    if (e.keyCode === 27) {
+      setLine({});
+    }
+  };
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
+    setContext(context);
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // Different from canvas.width and canvas.height
@@ -131,11 +186,19 @@ const Grid = ({ size }) => {
     }
   }, [size]);
 
-  return <GridCanvas innerRef={canvasRef} />;
+  return (
+    <GridCanvas
+      tabIndex="0"
+      innerRef={canvasRef}
+      onWheel={handleWheel}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+    />
+  );
 };
 
 Grid.propTypes = {
-  size: PropTypes.number.isRequired,
+  isDrawing: PropTypes.bool.isRequired,
 };
 
 export default Grid;

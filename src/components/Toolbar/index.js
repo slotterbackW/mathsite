@@ -4,6 +4,7 @@ import { createComponent } from 'react-fela';
 
 import TextAreaButton from './components/TextAreaButton';
 import EquationAreaButton from './components/EquationAreaButton';
+import DrawButton from './components/DrawButton';
 
 const StyledToolbar = createComponent(
   () => ({
@@ -22,18 +23,20 @@ const StyledToolbar = createComponent(
   'div',
 );
 
-const Toolbar = ({ addElement }) => {
+const Toolbar = ({ addElement, toggleIsDrawing }) => {
   const toolbarRef = useRef(null);
   return (
     <StyledToolbar innerRef={toolbarRef}>
       <TextAreaButton addElement={addElement} />
       <EquationAreaButton addElement={addElement} />
+      <DrawButton toggleIsDrawing={toggleIsDrawing} />
     </StyledToolbar>
   );
 };
 
 Toolbar.propTypes = {
   addElement: PropTypes.func.isRequired,
+  toggleIsDrawing: PropTypes.func.isRequired,
 };
 
 export default Toolbar;
