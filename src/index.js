@@ -35,7 +35,11 @@ const App = () => {
   return (
     <RendererProvider renderer={renderer}>
       <StyledApp>
-        <Toolbar addElement={addElement} toggleIsDrawing={toggleIsDrawing} />
+        <Toolbar
+          addElement={addElement}
+          toggleIsDrawing={toggleIsDrawing}
+          isDrawing={isDrawing}
+        />
         <Grid isDrawing={isDrawing} />
         {elements.map(({ Element, id }) => (
           <Element key={id} removeElement={() => removeElement(id)} />

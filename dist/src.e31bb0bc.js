@@ -33705,7 +33705,9 @@ var TextArea = function TextArea(_ref) {
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "handle",
     style: {
-      display: 'inline-flex'
+      display: 'inline-flex',
+      position: 'absolute',
+      left: 0
     }
   }, /*#__PURE__*/_react.default.createElement(StyledTextArea, {
     autoFocus: true,
@@ -33738,9 +33740,10 @@ var _reactFela = require("react-fela");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var StyledButton = (0, _reactFela.createComponent)(function () {
+var StyledButton = (0, _reactFela.createComponent)(function (_ref) {
+  var isOn = _ref.isOn;
   return {
-    background: 'white',
+    background: isOn ? '#AED6F1' : 'white',
     transition: 'background 0.25s, border-color 0.25s',
     borderRadius: '50%',
     padding: '12px',
@@ -33756,21 +33759,25 @@ var StyledButton = (0, _reactFela.createComponent)(function () {
   };
 }, 'button', ['onClick', 'type']);
 
-var Button = function Button(_ref) {
-  var onClick = _ref.onClick,
-      children = _ref.children;
+var Button = function Button(_ref2) {
+  var onClick = _ref2.onClick,
+      children = _ref2.children,
+      isOn = _ref2.isOn;
   return /*#__PURE__*/_react.default.createElement(StyledButton, {
     type: "button",
-    onClick: onClick
+    onClick: onClick,
+    isOn: isOn
   }, children);
 };
 
 Button.propTypes = {
   onClick: _propTypes.default.func,
-  children: _propTypes.default.node.isRequired
+  children: _propTypes.default.node.isRequired,
+  isOn: _propTypes.default.bool
 };
 Button.defaultProps = {
-  onClick: function onClick() {}
+  onClick: function onClick() {},
+  isOn: false
 };
 var _default = Button;
 exports.default = _default;
@@ -33954,14 +33961,16 @@ var _Button = _interopRequireDefault(require("../Button"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var DrawButton = function DrawButton(_ref) {
-  var toggleIsDrawing = _ref.toggleIsDrawing;
+  var isDrawing = _ref.isDrawing,
+      toggleIsDrawing = _ref.toggleIsDrawing;
 
   var onClick = function onClick() {
     toggleIsDrawing();
   };
 
   return /*#__PURE__*/_react.default.createElement(_Button.default, {
-    onClick: onClick
+    onClick: onClick,
+    isOn: isDrawing
   }, /*#__PURE__*/_react.default.createElement("img", {
     src: _pentagon.default,
     alt: "Line Tool Button",
@@ -33972,6 +33981,7 @@ var DrawButton = function DrawButton(_ref) {
 
 DrawButton.displayName = 'DrawButton';
 DrawButton.propTypes = {
+  isDrawing: _propTypes.default.bool.isRequired,
   toggleIsDrawing: _propTypes.default.func.isRequired
 };
 var _default = DrawButton;
@@ -34020,7 +34030,8 @@ var StyledToolbar = (0, _reactFela.createComponent)(function () {
 
 var Toolbar = function Toolbar(_ref) {
   var addElement = _ref.addElement,
-      toggleIsDrawing = _ref.toggleIsDrawing;
+      toggleIsDrawing = _ref.toggleIsDrawing,
+      isDrawing = _ref.isDrawing;
   var toolbarRef = (0, _react.useRef)(null);
   return /*#__PURE__*/_react.default.createElement(StyledToolbar, {
     innerRef: toolbarRef
@@ -34029,13 +34040,15 @@ var Toolbar = function Toolbar(_ref) {
   }), /*#__PURE__*/_react.default.createElement(_EquationAreaButton.default, {
     addElement: addElement
   }), /*#__PURE__*/_react.default.createElement(_DrawButton.default, {
-    toggleIsDrawing: toggleIsDrawing
+    toggleIsDrawing: toggleIsDrawing,
+    isDrawing: isDrawing
   }));
 };
 
 Toolbar.propTypes = {
   addElement: _propTypes.default.func.isRequired,
-  toggleIsDrawing: _propTypes.default.func.isRequired
+  toggleIsDrawing: _propTypes.default.func.isRequired,
+  isDrawing: _propTypes.default.bool.isRequired
 };
 var _default = Toolbar;
 exports.default = _default;
@@ -53410,17 +53423,17 @@ var Grid = function Grid(_ref) {
 
     var increment = maxCanvasSize / (size * 2);
 
-    for (var point = increment; Math.floor(point) < Math.floor(maxCanvasSize); point += increment) {
-      context.lineWidth = _styleConstants.GRID_LINE_WIDTH;
+    for (var point = increment; Math.trunc(Math.round(point)) < Math.floor(maxCanvasSize); point += increment) {
+      context.lineWidth = _styleConstants.GRID_LINE_WIDTH; // Increase width for axis lines
 
-      if (Math.floor(point) === Math.floor(maxCanvasSize / 2)) {
+      if (Math.trunc(Math.round(point)) === Math.floor(maxCanvasSize / 2)) {
         context.lineWidth = _styleConstants.AXIS_LINE_WIDTH;
       } // horizontal lines
 
 
       (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2, point + _styleConstants.PADDING, width / 2 + maxCanvasSize / 2, point + _styleConstants.PADDING); // vertical lines
 
-      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2 + _styleConstants.PADDING, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2 + _styleConstants.PADDING); // vertical lines
+      (0, _canvas.drawLine)(context, width / 2 - maxCanvasSize / 2 + point, height / 2 - maxCanvasSize / 2 + _styleConstants.PADDING, width / 2 - maxCanvasSize / 2 + point, height / 2 + maxCanvasSize / 2 + _styleConstants.PADDING);
     } // X axis label
 
 
@@ -53619,7 +53632,8 @@ var App = function App() {
     renderer: renderer
   }, /*#__PURE__*/_react.default.createElement(StyledApp, null, /*#__PURE__*/_react.default.createElement(_Toolbar.default, {
     addElement: addElement,
-    toggleIsDrawing: toggleIsDrawing
+    toggleIsDrawing: toggleIsDrawing,
+    isDrawing: isDrawing
   }), /*#__PURE__*/_react.default.createElement(_Grid.default, {
     isDrawing: isDrawing
   }), elements.map(function (_ref) {
@@ -53663,7 +53677,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54775" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63321" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

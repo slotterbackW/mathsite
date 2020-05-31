@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { createComponent } from 'react-fela';
 
 const StyledButton = createComponent(
-  () => ({
-    background: 'white',
+  ({ isOn }) => ({
+    background: isOn ? '#AED6F1' : 'white',
     transition: 'background 0.25s, border-color 0.25s',
     borderRadius: '50%',
     padding: '12px',
@@ -22,8 +22,8 @@ const StyledButton = createComponent(
   ['onClick', 'type'],
 );
 
-const Button = ({ onClick, children }) => (
-  <StyledButton type="button" onClick={onClick}>
+const Button = ({ onClick, children, isOn }) => (
+  <StyledButton type="button" onClick={onClick} isOn={isOn}>
     {children}
   </StyledButton>
 );
@@ -31,10 +31,12 @@ const Button = ({ onClick, children }) => (
 Button.propTypes = {
   onClick: PropTypes.func,
   children: PropTypes.node.isRequired,
+  isOn: PropTypes.bool,
 };
 
 Button.defaultProps = {
   onClick: () => {},
+  isOn: false,
 };
 
 export default Button;

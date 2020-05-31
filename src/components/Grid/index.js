@@ -95,13 +95,16 @@ const Grid = ({ isDrawing }) => {
     const increment = maxCanvasSize / (size * 2);
     for (
       let point = increment;
-      Math.floor(point) < Math.floor(maxCanvasSize);
+      Math.trunc(Math.round(point)) < Math.floor(maxCanvasSize);
       point += increment
     ) {
       context.lineWidth = GRID_LINE_WIDTH;
-      if (Math.floor(point) === Math.floor(maxCanvasSize / 2)) {
+
+      // Increase width for axis lines
+      if (Math.trunc(Math.round(point)) === Math.floor(maxCanvasSize / 2)) {
         context.lineWidth = AXIS_LINE_WIDTH;
       }
+
       // horizontal lines
       drawLine(
         context,
@@ -118,7 +121,7 @@ const Grid = ({ isDrawing }) => {
         height / 2 - maxCanvasSize / 2 + PADDING,
         width / 2 - maxCanvasSize / 2 + point,
         height / 2 + maxCanvasSize / 2 + PADDING,
-      ); // vertical lines
+      );
     }
 
     // X axis label

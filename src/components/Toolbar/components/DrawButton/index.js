@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import PentagonSVG from '../../../../assets/pentagon.svg';
 import Button from '../Button';
 
-const DrawButton = ({ toggleIsDrawing }) => {
+const DrawButton = ({ isDrawing, toggleIsDrawing }) => {
   const onClick = () => {
     toggleIsDrawing();
   };
 
   return (
-    <Button onClick={onClick}>
+    <Button onClick={onClick} isOn={isDrawing}>
       <img
         src={PentagonSVG}
         alt="Line Tool Button"
@@ -24,6 +24,7 @@ const DrawButton = ({ toggleIsDrawing }) => {
 DrawButton.displayName = 'DrawButton';
 
 DrawButton.propTypes = {
+  isDrawing: PropTypes.bool.isRequired,
   toggleIsDrawing: PropTypes.func.isRequired,
 };
 

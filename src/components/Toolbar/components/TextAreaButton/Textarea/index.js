@@ -49,7 +49,10 @@ const TextArea = ({ removeElement }) => {
 
   return (
     <Draggable handle=".handle" onStart={onStart}>
-      <div className="handle" style={{ display: 'inline-flex' }}>
+      <div
+        className="handle"
+        style={{ display: 'inline-flex', position: 'absolute', left: 0 }}
+      >
         <StyledTextArea
           autoFocus
           placeholder="Type here..."

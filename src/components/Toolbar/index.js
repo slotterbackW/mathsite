@@ -23,13 +23,13 @@ const StyledToolbar = createComponent(
   'div',
 );
 
-const Toolbar = ({ addElement, toggleIsDrawing }) => {
+const Toolbar = ({ addElement, toggleIsDrawing, isDrawing }) => {
   const toolbarRef = useRef(null);
   return (
     <StyledToolbar innerRef={toolbarRef}>
       <TextAreaButton addElement={addElement} />
       <EquationAreaButton addElement={addElement} />
-      <DrawButton toggleIsDrawing={toggleIsDrawing} />
+      <DrawButton toggleIsDrawing={toggleIsDrawing} isDrawing={isDrawing} />
     </StyledToolbar>
   );
 };
@@ -37,6 +37,7 @@ const Toolbar = ({ addElement, toggleIsDrawing }) => {
 Toolbar.propTypes = {
   addElement: PropTypes.func.isRequired,
   toggleIsDrawing: PropTypes.func.isRequired,
+  isDrawing: PropTypes.bool.isRequired,
 };
 
 export default Toolbar;
