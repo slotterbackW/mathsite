@@ -10,7 +10,7 @@
   "dependencies": {
     "assets": "^3.0.1",
     "fela": "^11.3.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "prop-types": "^15.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
